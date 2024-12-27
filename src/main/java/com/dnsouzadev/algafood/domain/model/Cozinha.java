@@ -4,17 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "tab_cozinhas")
 public class Cozinha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nom_cozinha")
+    @Getter
     private String nome;
 
     public Cozinha() {
@@ -23,5 +20,13 @@ public class Cozinha {
     public Cozinha(Long id, String nome) {
         this.id = id;
         this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
