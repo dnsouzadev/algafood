@@ -1,6 +1,7 @@
 package com.dnsouzadev.algafood.jpa;
 
 import com.dnsouzadev.algafood.domain.model.Cozinha;
+import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import org.apache.catalina.LifecycleState;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -18,7 +19,7 @@ public class ConsultaCozinhaMain {
                 .web(WebApplicationType.NONE)
                 .run(args);
 
-        CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+        CozinhaRepository cadastroCozinha = applicationContext.getBean(CozinhaRepository.class);
 
         List<Cozinha> cozinhas = cadastroCozinha.listar();
 

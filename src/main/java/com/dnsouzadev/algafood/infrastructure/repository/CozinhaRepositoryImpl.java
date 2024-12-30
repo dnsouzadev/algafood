@@ -1,41 +1,40 @@
-package com.dnsouzadev.algafood.jpa;
+package com.dnsouzadev.algafood.infrastructure.repository;
 
 import com.dnsouzadev.algafood.domain.model.Cozinha;
+import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
-public class CadastroCozinha {
+public class CozinhaRepositoryImpl implements CozinhaRepository {
 
     @PersistenceContext
     private EntityManager manager;
 
+    @Override
     public List<Cozinha> listar() {
         return manager.createQuery("from Cozinha", Cozinha.class)
                 .getResultList();
     }
 
+    @Override
     @Transactional
-    public Cozinha adicionar(Cozinha cozinha) {
+    public Cozinha salvar(Cozinha cozinha) {
         return manager.merge(cozinha);
     }
 
-    public Cozinha consultar(Long id) {
+    @Override
+    public Cozinha buscar(Long id) {
         return manager.find(Cozinha.class, id);
     }
 
+    @Override
     @Transactional
     public void remover(Cozinha cozinha) {
-        cozinha = consultar(cozinha.getId());
+        cozinha = buscar(cozinha.getId());
         manager.remove(cozinha);
-    }
-
-    public Cozinha atualizar(Cozinha cozinha) {
-        return manager.merge(cozinha);
     }
 
 }
