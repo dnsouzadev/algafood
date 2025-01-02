@@ -22,8 +22,8 @@ public class CadastroCozinhaMain {
         Cozinha cozinha2 = new Cozinha();
         cozinha2.setNome("Japonesaa");
 
-        cadastroCozinha.adicionar(cozinha1);
-        cadastroCozinha.adicionar(cozinha2);
+        cadastroCozinha.salvar(cozinha1);
+        cadastroCozinha.salvar(cozinha2);
 
         System.out.println("Cozinhas cadastradas:");
         cadastroCozinha.listar().forEach(cozinha -> System.out.println(cozinha.getNome()));

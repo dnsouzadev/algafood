@@ -28,7 +28,7 @@ public class ConsultaCozinhaMain {
             System.out.println("ID: " + cozinha.getId());
         }
 
-        System.out.println(cadastroCozinha.consultar(1L).getNome());
+        System.out.println(cadastroCozinha.buscar(1L).getNome());
 
 
     }
