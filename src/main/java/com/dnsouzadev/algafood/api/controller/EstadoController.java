@@ -3,6 +3,7 @@ package com.dnsouzadev.algafood.api.controller;
 import com.dnsouzadev.algafood.domain.model.Estado;
 import com.dnsouzadev.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,23 +16,24 @@ public class EstadoController {
     private EstadoRepository estadoRepository;
 
     @GetMapping
-    public List<Estado> listar() {
-        return estadoRepository.listar();
+    public ResponseEntity<List<Estado>> listar() {
+        return ResponseEntity.ok(estadoRepository.listar());
     }
 
     @GetMapping("/{estadoId}")
-    public Estado buscar(Long estadoId) {
-        return estadoRepository.buscar(estadoId);
+    public ResponseEntity<Estado> buscar(Long estadoId) {
+        return estadoRepository.buscar(estadoId) != null ? ResponseEntity.ok(estadoRepository.buscar(estadoId)) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public Estado adicionar(Estado estado) {
-        return estadoRepository.salvar(estado);
+    public ResponseEntity<Estado> adicionar(Estado estado) {
+        return ResponseEntity.ok(estadoRepository.salvar(estado));
     }
 
     @DeleteMapping("/{estadoId}")
-    public void remover(@PathVariable Long estadoId) {
+    public ResponseEntity<Void> remover(@PathVariable Long estadoId) {
         estadoRepository.remover(estadoRepository.buscar(estadoId));
+        return ResponseEntity.noContent().build();
     }
 
 }
