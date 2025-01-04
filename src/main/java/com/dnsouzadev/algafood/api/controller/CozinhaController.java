@@ -2,6 +2,7 @@ package com.dnsouzadev.algafood.api.controller;
 
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
+import com.dnsouzadev.algafood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,9 @@ public class CozinhaController {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    @Autowired
+    private CadastroCozinhaService cadastroCozinha;
 
     @GetMapping
     public ResponseEntity<List<Cozinha>> listar() {
@@ -30,7 +34,7 @@ public class CozinhaController {
 
     @PostMapping
     public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha cozinha) {
-        return ResponseEntity.ok(cozinhaRepository.salvar(cozinha));
+        return ResponseEntity.ok(cadastroCozinha.salvar(cozinha));
     }
 
     @PutMapping("/{cozinhaId}")
