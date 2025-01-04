@@ -4,10 +4,7 @@ import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,31 @@ public class CozinhaController {
     public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
         if (cozinhaRepository.buscar(cozinhaId) != null) {
             return ResponseEntity.ok(cozinhaRepository.buscar(cozinhaId));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha cozinha) {
+        return ResponseEntity.ok(cozinhaRepository.salvar(cozinha));
+    }
+
+    @PutMapping("/{cozinhaId}")
+    public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+        if (cozinhaAtual != null) {
+            cozinhaAtual.setNome(cozinha.getNome());
+            return ResponseEntity.ok(cozinhaRepository.salvar(cozinhaAtual));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{cozinhaId}")
+    public ResponseEntity<Void> remover(@PathVariable Long cozinhaId) {
+        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+        if (cozinha != null) {
+            cozinhaRepository.remover(cozinha);
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
