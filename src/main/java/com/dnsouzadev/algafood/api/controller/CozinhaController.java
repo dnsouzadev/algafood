@@ -1,5 +1,7 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.domain.exception.EntidadeEmUsoException;
+import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import com.dnsouzadev.algafood.domain.service.CadastroCozinhaService;
@@ -49,11 +51,13 @@ public class CozinhaController {
 
     @DeleteMapping("/{cozinhaId}")
     public ResponseEntity<Void> remover(@PathVariable Long cozinhaId) {
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-        if (cozinha != null) {
-            cozinhaRepository.remover(cozinha);
+        try {
+            cadastroCozinha.excluir(cozinhaId);
             return ResponseEntity.noContent().build();
+        } catch (EntidadeEmUsoException e) {
+            return ResponseEntity.status(409).build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 }
