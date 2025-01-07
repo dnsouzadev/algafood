@@ -31,6 +31,11 @@ public class EstadoRepositoryImpl implements EstadoRepository {
     }
 
     @Override
+    public Estado atualizar(Estado estado) {
+        return manager.merge(estado);
+    }
+
+    @Override
     public void remover(Estado estado) {
         estado = buscar(estado.getId());
         manager.remove(estado);
