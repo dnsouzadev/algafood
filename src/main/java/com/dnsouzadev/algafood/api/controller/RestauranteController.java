@@ -1,11 +1,13 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Restaurante;
+import com.dnsouzadev.algafood.domain.service.CadastroRestauranteService;
 import com.dnsouzadev.algafood.domain.service.ListarRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,14 +18,34 @@ public class RestauranteController {
     @Autowired
     private ListarRestauranteService listarRestauranteService;
 
+    @Autowired
+    private CadastroRestauranteService cadastroRestauranteService;
+
     @GetMapping
-    public List<Restaurante> listar() {
-        return listarRestauranteService.listar();
+    public ResponseEntity<List<Restaurante>> listar() {
+        return ResponseEntity.ok(listarRestauranteService.listar());
     }
 
     @GetMapping("/{restauranteId}")
-    public Restaurante buscar(Long restauranteId) {
-        return listarRestauranteService.buscar(restauranteId);
+    public ResponseEntity<Restaurante> buscar(@PathVariable Long restauranteId) {
+        if (listarRestauranteService.buscar(restauranteId) != null) {
+            return ResponseEntity.ok(listarRestauranteService.buscar(restauranteId));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Restaurante> adicionar(@RequestBody Restaurante restaurante) {
+        try {
+            restaurante = cadastroRestauranteService.salvar(restaurante);
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(restaurante);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
