@@ -35,4 +35,9 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
         restaurante = buscar(restaurante.getId());
         manager.remove(restaurante);
     }
+
+    @Override
+    public Restaurante atualizar(Restaurante restaurante) {
+        return manager.merge(restaurante);
+    }
 }

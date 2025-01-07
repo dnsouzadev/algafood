@@ -35,19 +35,41 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> adicionar(@RequestBody Restaurante restaurante) {
+    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
         try {
             restaurante = cadastroRestauranteService.salvar(restaurante);
+            System.out.println("Restaurante adicionado: " + restaurante);
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(restaurante);
         } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao adicionar restaurante: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao adicionar restaurante: " + e.getMessage());
         }
     }
 
+    @PutMapping("/{restauranteId}")
+    public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
+        try {
+            Restaurante restauranteAtual = cadastroRestauranteService.atualizar(restaurante);
+            return ResponseEntity.ok().body(restauranteAtual);
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe um cadastro de restaurante com código " + restauranteId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar restaurante: " + e.getMessage());
+        }
+    }
 
-
+    @DeleteMapping("/{restauranteId}")
+    public ResponseEntity<?> remover(@PathVariable Long restauranteId) {
+        try {
+            cadastroRestauranteService.excluir(restauranteId);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe um cadastro de restaurante com código " + restauranteId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao remover restaurante: " + e.getMessage());
+        }
+    }
 }

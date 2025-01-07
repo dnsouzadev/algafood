@@ -5,8 +5,10 @@ import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.model.Restaurante;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import com.dnsouzadev.algafood.domain.repository.RestauranteRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroRestauranteService {
@@ -15,8 +17,12 @@ public class CadastroRestauranteService {
     private RestauranteRepository restauranteRepository;
 
     @Autowired
+    private ListarRestauranteService listarRestauranteService;
+
+    @Autowired
     private CozinhaRepository cozinhaRepository;
 
+    @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
@@ -30,6 +36,26 @@ public class CadastroRestauranteService {
 
         return restauranteRepository.salvar(restaurante);
     }
+
+    @Transactional
+    public void excluir(Long restauranteId) {
+        Restaurante restaurante = listarRestauranteService.existePeloId(restauranteId);
+        restauranteRepository.remover(restaurante);
+    }
+
+    @Transactional
+    public Restaurante atualizar(Restaurante restaurante) {
+        Restaurante restauranteAtual = listarRestauranteService.existePeloId(restaurante.getId());
+        Cozinha cozinha = cozinhaRepository.buscar(restaurante.getCozinha().getId());
+        BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+        restauranteAtual.setCozinha(cozinha);
+        return restauranteRepository.salvar(restauranteAtual);
+    }
+
+
+
+
+
 
 
 
