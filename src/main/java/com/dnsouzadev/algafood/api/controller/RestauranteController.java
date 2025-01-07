@@ -52,7 +52,7 @@ public class RestauranteController {
     @PutMapping("/{restauranteId}")
     public ResponseEntity<?> atualizar(@PathVariable Long restauranteId, @RequestBody Restaurante restaurante) {
         try {
-            Restaurante restauranteAtual = cadastroRestauranteService.atualizar(restaurante);
+            Restaurante restauranteAtual = cadastroRestauranteService.atualizar(restauranteId, restaurante);
             return ResponseEntity.ok().body(restauranteAtual);
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe um cadastro de restaurante com código " + restauranteId);

@@ -10,4 +10,5 @@ public interface CidadeRepository {
     Cidade salvar(Cidade cidade);
     Cidade atualizar(Cidade cidade);
     void remover(Cidade cidade);
+    boolean existsByEstadoId(Long estadoId);
 }

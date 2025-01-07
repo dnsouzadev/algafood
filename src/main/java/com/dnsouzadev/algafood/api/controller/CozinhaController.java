@@ -22,6 +22,8 @@ public class CozinhaController {
 
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
+    @Autowired
+    private CadastroCozinhaService cadastroCozinhaService;
 
     @GetMapping
     public ResponseEntity<List<Cozinha>> listar() {
@@ -43,13 +45,8 @@ public class CozinhaController {
 
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-        Cozinha cozinhaAtual = listarCozinhaService.buscar(cozinhaId);
-        if (cozinhaAtual != null) {
-            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-            cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
-            return ResponseEntity.ok(cadastroCozinha.salvar(cozinhaAtual));
-        }
-        return ResponseEntity.notFound().build();
+        Cozinha cozinhaAtual = cadastroCozinhaService.atualizar(cozinhaId, cozinha);
+        return ResponseEntity.ok(cozinhaAtual);
     }
 
     @DeleteMapping("/{cozinhaId}")

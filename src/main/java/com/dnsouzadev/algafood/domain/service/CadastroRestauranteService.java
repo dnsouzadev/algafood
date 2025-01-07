@@ -44,8 +44,8 @@ public class CadastroRestauranteService {
     }
 
     @Transactional
-    public Restaurante atualizar(Restaurante restaurante) {
-        Restaurante restauranteAtual = listarRestauranteService.existePeloId(restaurante.getId());
+    public Restaurante atualizar(Long restauranteId, Restaurante restaurante) {
+        Restaurante restauranteAtual = listarRestauranteService.existePeloId(restauranteId);
         Cozinha cozinha = cozinhaRepository.buscar(restaurante.getCozinha().getId());
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
         restauranteAtual.setCozinha(cozinha);

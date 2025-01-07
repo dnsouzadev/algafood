@@ -21,6 +21,13 @@ public class CadastroCozinhaService {
     }
 
     @Transactional
+    public Cozinha atualizar(Long cozinhaId, Cozinha cozinha) {
+        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+        cozinhaAtual.setNome(cozinha.getNome());
+        return cozinhaRepository.salvar(cozinhaAtual);
+    }
+
+    @Transactional
     public void excluir(Long cozinhaId) {
         try {
             cozinhaRepository.remover(cozinhaId);

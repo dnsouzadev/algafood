@@ -40,4 +40,12 @@ public class CidadeRepositoryImpl implements CidadeRepository {
         cidade = buscar(cidade.getId());
         manager.remove(cidade);
     }
+
+    @Override
+    public boolean existsByEstadoId(Long estadoId) {
+        String jpql = "SELECT COUNT(c) > 0 FROM Cidade c WHERE c.estado.id = :estadoId";
+        return manager.createQuery(jpql, Boolean.class)
+                .setParameter("estadoId", estadoId)
+                .getSingleResult();
+    }
 }
