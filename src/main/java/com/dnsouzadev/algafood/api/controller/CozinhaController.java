@@ -5,6 +5,7 @@ import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import com.dnsouzadev.algafood.domain.service.CadastroCozinhaService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +44,9 @@ public class CozinhaController {
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
         Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
         if (cozinhaAtual != null) {
-            cozinhaAtual.setNome(cozinha.getNome());
-            return ResponseEntity.ok(cozinhaRepository.salvar(cozinhaAtual));
+            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+            cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
+            return ResponseEntity.ok(cadastroCozinha.salvar(cozinhaAtual));
         }
         return ResponseEntity.notFound().build();
     }

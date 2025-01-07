@@ -4,9 +4,11 @@ import com.dnsouzadev.algafood.domain.model.Restaurante;
 import com.dnsouzadev.algafood.domain.repository.RestauranteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class RestauranteRepositoryImpl implements RestauranteRepository {
 
     @PersistenceContext
