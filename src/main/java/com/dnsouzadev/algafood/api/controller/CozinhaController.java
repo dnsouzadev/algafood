@@ -5,6 +5,7 @@ import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import com.dnsouzadev.algafood.domain.service.CadastroCozinhaService;
+import com.dnsouzadev.algafood.domain.service.ListarCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +18,20 @@ import java.util.List;
 public class CozinhaController {
 
     @Autowired
-    private CozinhaRepository cozinhaRepository;
+    private ListarCozinhaService listarCozinhaService;
 
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
 
     @GetMapping
     public ResponseEntity<List<Cozinha>> listar() {
-        return ResponseEntity.ok(cozinhaRepository.listar());
+        return ResponseEntity.ok(listarCozinhaService.listar());
     }
 
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-        if (cozinhaRepository.buscar(cozinhaId) != null) {
-            return ResponseEntity.ok(cozinhaRepository.buscar(cozinhaId));
+        if (listarCozinhaService.buscar(cozinhaId) != null) {
+            return ResponseEntity.ok(listarCozinhaService.buscar(cozinhaId));
         }
         return ResponseEntity.notFound().build();
     }
@@ -42,7 +43,7 @@ public class CozinhaController {
 
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+        Cozinha cozinhaAtual = listarCozinhaService.buscar(cozinhaId);
         if (cozinhaAtual != null) {
             BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
             cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
