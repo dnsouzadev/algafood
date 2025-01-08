@@ -17,20 +17,22 @@ public class CadastroCozinhaService {
 
     @Transactional
     public Cozinha salvar(Cozinha cozinha) {
-        return cozinhaRepository.salvar(cozinha);
+        return cozinhaRepository.save(cozinha);
     }
 
     @Transactional
     public Cozinha atualizar(Long cozinhaId, Cozinha cozinha) {
-        Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+        Cozinha cozinhaAtual = cozinhaRepository.findById(cozinhaId).orElseThrow(
+                () -> new RuntimeException("Cozinha não encontrada")
+        );
         cozinhaAtual.setNome(cozinha.getNome());
-        return cozinhaRepository.salvar(cozinhaAtual);
+        return cozinhaRepository.save(cozinhaAtual);
     }
 
     @Transactional
     public void excluir(Long cozinhaId) {
         try {
-            cozinhaRepository.remover(cozinhaId);
+            cozinhaRepository.deleteById(cozinhaId);
         } catch ( EmptyResultDataAccessException e) {
             throw new EntidadeEmUsoException(
                     String.format("Não existe um cadastro de cozinha com código %d", cozinhaId));

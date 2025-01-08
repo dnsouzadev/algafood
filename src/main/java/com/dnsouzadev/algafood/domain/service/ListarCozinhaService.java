@@ -14,11 +14,13 @@ public class ListarCozinhaService {
     private CozinhaRepository cozinhaRepository;
 
     public List<Cozinha> listar() {
-        return cozinhaRepository.listar();
+        return cozinhaRepository.findAll();
     }
 
     public Cozinha buscar(Long id) {
-        return cozinhaRepository.buscar(id);
+        return cozinhaRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cozinha não encontrada")
+        );
     }
 
 }
