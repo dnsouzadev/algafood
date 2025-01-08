@@ -14,11 +14,13 @@ public class ListarCidadeService {
     private CidadeRepository cidadeRepository;
 
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     public Cidade buscar(Long id) {
-        return cidadeRepository.buscar(id);
+        return cidadeRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Cidade não encontrada")
+        );
     }
 
 }

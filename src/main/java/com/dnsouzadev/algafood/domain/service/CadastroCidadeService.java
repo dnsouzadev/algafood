@@ -16,22 +16,26 @@ public class CadastroCidadeService {
 
     @Transactional
     public Cidade salvar(Cidade cidade) {
-        return cidadeRepository.salvar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     @Transactional
     public Cidade atualizar(Long cidadeId, Cidade cidade) {
-        Cidade cidadeAtual = cidadeRepository.buscar(cidadeId);
+        Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElseThrow(
+                () -> new RuntimeException("Cidade não encontrada")
+        );
         Estado estado = cidadeAtual.getEstado();
         BeanUtils.copyProperties(cidade, cidadeAtual, "id");
         cidadeAtual.setEstado(estado);
-        return cidadeRepository.salvar(cidadeAtual);
+        return cidadeRepository.save(cidadeAtual);
     }
 
     @Transactional
     public void excluir(Long cidadeId) {
-        Cidade cidade = cidadeRepository.buscar(cidadeId);
-        cidadeRepository.remover(cidade);
+        Cidade cidade = cidadeRepository.findById(cidadeId).orElseThrow(
+                () -> new RuntimeException("Cidade não encontrada")
+        );
+        cidadeRepository.delete(cidade);
     }
 
 

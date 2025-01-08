@@ -15,11 +15,13 @@ public class ListarRestauranteService {
     private RestauranteRepository restauranteRepository;
 
     public List<Restaurante> listar() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     public Restaurante buscar(Long id) {
-        return restauranteRepository.buscar(id);
+        return restauranteRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Restaurante não encontrado")
+        );
     }
 
     public Restaurante existePeloId(Long id) {

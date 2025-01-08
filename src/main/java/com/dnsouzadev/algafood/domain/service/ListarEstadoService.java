@@ -14,11 +14,13 @@ public class ListarEstadoService {
     private EstadoRepository estadoRepository;
 
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     public Estado buscar(Long id) {
-        return estadoRepository.buscar(id);
+        return estadoRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Estado não encontrado")
+        );
     }
 
 }

@@ -22,13 +22,13 @@ public class CadastroEstadoService {
 
     @Transactional
     public Estado salvar(Estado estado) {
-        return estadoRepository.salvar(estado);
+        return estadoRepository.save(estado);
     }
 
     @Transactional
     public Estado atualizar(Long estadoId, Estado estado) {
         Estado estadoAtual = listarEstadoService.buscar(estadoId);
-        return estadoRepository.salvar(estadoAtual);
+        return estadoRepository.save(estadoAtual);
     }
 
     @Transactional
@@ -44,7 +44,7 @@ public class CadastroEstadoService {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe cadastro de estado com código %d", estadoId));
         }
-        estadoRepository.remover(estado);
+        estadoRepository.delete(estado);
     }
 
 }

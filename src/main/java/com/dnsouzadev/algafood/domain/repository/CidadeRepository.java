@@ -1,14 +1,15 @@
 package com.dnsouzadev.algafood.domain.repository;
 
 import com.dnsouzadev.algafood.domain.model.Cidade;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+@Repository
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 
-public interface CidadeRepository {
-    List<Cidade> listar();
-    Cidade buscar(Long id);
-    Cidade salvar(Cidade cidade);
-    Cidade atualizar(Cidade cidade);
-    void remover(Cidade cidade);
-    boolean existsByEstadoId(Long estadoId);
+    @Query("SELECT COUNT(c) > 0 FROM Cidade c WHERE c.estado.id = :estadoId")
+    boolean existsByEstadoId(@Param("estadoId") Long estadoId);
 }

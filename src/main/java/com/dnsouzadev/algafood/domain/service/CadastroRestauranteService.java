@@ -25,7 +25,10 @@ public class CadastroRestauranteService {
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+        Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(
+                () -> new EntidadeNaoEncontradaException(
+                        String.format("Não existe cadastro de cozinha com código %d", cozinhaId))
+        );
 
         if (cozinha == null) {
             throw new EntidadeNaoEncontradaException(
@@ -34,22 +37,24 @@ public class CadastroRestauranteService {
 
         restaurante.setCozinha(cozinha);
 
-        return restauranteRepository.salvar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     @Transactional
     public void excluir(Long restauranteId) {
         Restaurante restaurante = listarRestauranteService.existePeloId(restauranteId);
-        restauranteRepository.remover(restaurante);
+        restauranteRepository.delete(restaurante);
     }
 
     @Transactional
     public Restaurante atualizar(Long restauranteId, Restaurante restaurante) {
         Restaurante restauranteAtual = listarRestauranteService.existePeloId(restauranteId);
-        Cozinha cozinha = cozinhaRepository.buscar(restaurante.getCozinha().getId());
+        Cozinha cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId()).orElseThrow(
+                () -> new RuntimeException("Cozinha não encontrada")
+        );
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
         restauranteAtual.setCozinha(cozinha);
-        return restauranteRepository.salvar(restauranteAtual);
+        return restauranteRepository.save(restauranteAtual);
     }
 
 
