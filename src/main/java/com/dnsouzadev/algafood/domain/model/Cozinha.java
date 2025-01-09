@@ -1,9 +1,12 @@
 package com.dnsouzadev.algafood.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +18,10 @@ public class Cozinha {
 
     @Column(nullable = false)
     private String nome;
+
+    @OneToMany(mappedBy = "cozinha")
+    @JsonIgnore
+    private List<Restaurante> restaurantes = new ArrayList<>();
 
     public Cozinha() {
     }
@@ -38,6 +45,14 @@ public class Cozinha {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Restaurante> getRestaurantes() {
+        return restaurantes;
+    }
+
+    public void setRestaurantes(List<Restaurante> restaurantes) {
+        this.restaurantes = restaurantes;
     }
 
     @Override
