@@ -52,7 +52,7 @@ public class CadastroRestauranteService {
         Cozinha cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId()).orElseThrow(
                 () -> new RuntimeException("Cozinha não encontrada")
         );
-        BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento");
+        BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco");
         restauranteAtual.setCozinha(cozinha);
         return restauranteRepository.save(restauranteAtual);
     }
