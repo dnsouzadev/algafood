@@ -2,6 +2,8 @@ package com.dnsouzadev.algafood.domain.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +15,12 @@ public class Grupo {
 
     @Column(nullable = false)
     private String nome;
+
+    @ManyToMany
+    @JoinTable(name = "grupo_permissao",
+            joinColumns = @JoinColumn(name = "grupo_id"),
+            inverseJoinColumns = @JoinColumn(name = "permissao_id"))
+    private List<Permissao> permissoes = new ArrayList<>();
 
     public Grupo() {
     }
@@ -36,6 +44,14 @@ public class Grupo {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Permissao> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<Permissao> permissoes) {
+        this.permissoes = permissoes;
     }
 
     @Override
