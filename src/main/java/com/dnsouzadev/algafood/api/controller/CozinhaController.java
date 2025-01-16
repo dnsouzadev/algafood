@@ -8,6 +8,7 @@ import com.dnsouzadev.algafood.domain.service.CadastroCozinhaService;
 import com.dnsouzadev.algafood.domain.service.ListarCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,6 @@ public class CozinhaController {
     @Autowired
     private ListarCozinhaService listarCozinhaService;
 
-    @Autowired
-    private CadastroCozinhaService cadastroCozinha;
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
@@ -40,7 +39,7 @@ public class CozinhaController {
 
     @PostMapping
     public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha cozinha) {
-        return ResponseEntity.ok(cadastroCozinha.salvar(cozinha));
+        return ResponseEntity.ok(cadastroCozinhaService.salvar(cozinha));
     }
 
     @PutMapping("/{cozinhaId}")
@@ -50,14 +49,8 @@ public class CozinhaController {
     }
 
     @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<Void> remover(@PathVariable Long cozinhaId) {
-        try {
-            cadastroCozinha.excluir(cozinhaId);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(409).build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long cozinhaId) {
+        cadastroCozinhaService.excluir(cozinhaId);
     }
 }

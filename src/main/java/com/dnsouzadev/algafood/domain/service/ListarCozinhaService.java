@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.domain.service;
 
+import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ListarCozinhaService {
 
     public Cozinha buscar(Long id) {
         return cozinhaRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Cozinha não encontrada")
+                () -> new EntidadeNaoEncontradaException(String.format("Cozinha de id %d não encontrada", id))
         );
     }
 
