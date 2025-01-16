@@ -1,41 +1,47 @@
 package com.dnsouzadev.algafood.domain.service;
 
+import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cidade;
-import com.dnsouzadev.algafood.domain.model.Estado;
 import com.dnsouzadev.algafood.domain.repository.CidadeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
-public class CadastroCidadeService {
+public class CidadeService {
 
     @Autowired
     private CidadeRepository cidadeRepository;
 
-    @Transactional
+    public List<Cidade> listar() {
+        return cidadeRepository.findAll();
+    }
+
+    public Cidade buscar(Long id) {
+        return buscarOuFalhar(id);
+    }
+
     public Cidade salvar(Cidade cidade) {
         return cidadeRepository.save(cidade);
     }
 
-    @Transactional
     public Cidade atualizar(Long cidadeId, Cidade cidade) {
-        Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElseThrow(
-                () -> new RuntimeException("Cidade não encontrada")
-        );
-        Estado estado = cidadeAtual.getEstado();
+        Cidade cidadeAtual = buscarOuFalhar(cidadeId);
         BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-        cidadeAtual.setEstado(estado);
         return cidadeRepository.save(cidadeAtual);
     }
 
-    @Transactional
     public void excluir(Long cidadeId) {
-        Cidade cidade = cidadeRepository.findById(cidadeId).orElseThrow(
-                () -> new RuntimeException("Cidade não encontrada")
-        );
+        Cidade cidade = buscarOuFalhar(cidadeId);
         cidadeRepository.delete(cidade);
+    }
+
+    public Cidade buscarOuFalhar(Long cidadeId) {
+        return cidadeRepository.findById(cidadeId).orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Cidade não encontrada")
+        );
     }
 
 

@@ -1,12 +1,7 @@
 package com.dnsouzadev.algafood.api.controller;
 
-import com.dnsouzadev.algafood.domain.exception.EntidadeEmUsoException;
-import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
-import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
-import com.dnsouzadev.algafood.domain.service.CadastroCozinhaService;
-import com.dnsouzadev.algafood.domain.service.ListarCozinhaService;
-import org.springframework.beans.BeanUtils;
+import com.dnsouzadev.algafood.domain.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,38 +14,31 @@ import java.util.List;
 public class CozinhaController {
 
     @Autowired
-    private ListarCozinhaService listarCozinhaService;
-
-    @Autowired
-    private CadastroCozinhaService cadastroCozinhaService;
+    private CozinhaService cozinhaService;
 
     @GetMapping
     public ResponseEntity<List<Cozinha>> listar() {
-        return ResponseEntity.ok(listarCozinhaService.listar());
+        return ResponseEntity.ok(cozinhaService.listar());
     }
 
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-        if (listarCozinhaService.buscar(cozinhaId) != null) {
-            return ResponseEntity.ok(listarCozinhaService.buscar(cozinhaId));
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(cozinhaService.buscar(cozinhaId));
     }
 
     @PostMapping
     public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha cozinha) {
-        return ResponseEntity.ok(cadastroCozinhaService.salvar(cozinha));
+        return ResponseEntity.ok(cozinhaService.salvar(cozinha));
     }
 
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-        Cozinha cozinhaAtual = cadastroCozinhaService.atualizar(cozinhaId, cozinha);
-        return ResponseEntity.ok(cozinhaAtual);
+        return ResponseEntity.ok(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {
-        cadastroCozinhaService.excluir(cozinhaId);
+        cozinhaService.excluir(cozinhaId);
     }
 }

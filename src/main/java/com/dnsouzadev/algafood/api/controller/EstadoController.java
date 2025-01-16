@@ -2,9 +2,9 @@ package com.dnsouzadev.algafood.api.controller;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Estado;
-import com.dnsouzadev.algafood.domain.service.CadastroEstadoService;
-import com.dnsouzadev.algafood.domain.service.ListarEstadoService;
+import com.dnsouzadev.algafood.domain.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,52 +15,39 @@ import java.util.List;
 public class EstadoController {
 
     @Autowired
-    private ListarEstadoService listarEstadoService;
-
-    @Autowired
-    private CadastroEstadoService cadastroEstadoService;
+    private EstadoService estadoService;
 
     @GetMapping
     public ResponseEntity<List<Estado>> listar() {
-        return ResponseEntity.ok(listarEstadoService.listar());
+        return ResponseEntity.ok(estadoService.listar());
     }
 
     @GetMapping("/{estadoId}")
     public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-        if (estadoId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Estado estado = listarEstadoService.buscar(estadoId);
-        if (estado != null) {
-            return ResponseEntity.ok(estado);
-        }
-        return ResponseEntity.notFound().build();
+        if (estadoId == null) return ResponseEntity.badRequest().build();
+
+        Estado estado = estadoService.buscarOuFalhar(estadoId);
+
+        return ResponseEntity.ok(estado);
+
     }
 
     @PostMapping
     public ResponseEntity<Estado> adicionar(@RequestBody Estado estado) {
-        return ResponseEntity.ok(cadastroEstadoService.salvar(estado));
+        return ResponseEntity.ok(estadoService.salvar(estado));
     }
 
     @PutMapping("/{estadoId}")
     public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-        Estado estadoAtual = listarEstadoService.buscar(estadoId);
-        if (estadoAtual != null) {
-            return ResponseEntity.ok(cadastroEstadoService.atualizar(estadoId, estado));
-        }
-        return ResponseEntity.notFound().build();
+        estadoService.buscarOuFalhar(estadoId);
+        return ResponseEntity.ok(estadoService.atualizar(estadoId, estado));
+
     }
 
     @DeleteMapping("/{estadoId}")
-    public ResponseEntity<?> remover(@PathVariable Long estadoId) {
-        try {
-            cadastroEstadoService.excluir(listarEstadoService.buscar(estadoId).getId());
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e ) {
-            return ResponseEntity.status(400).body("Erro ao excluir estado: " + e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro ao excluir estado: " + e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long estadoId) {
+        estadoService.excluir(estadoService.buscar(estadoId).getId());
     }
 
 }
