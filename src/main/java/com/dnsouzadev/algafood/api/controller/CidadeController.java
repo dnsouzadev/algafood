@@ -27,8 +27,9 @@ public class CidadeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Cidade cidade) {
-            return ResponseEntity.ok(cidadeService.salvar(cidade));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cidade adicionar(@RequestBody Cidade cidade) {
+        return cidadeService.salvar(cidade);
     }
 
     @PutMapping("/{cidadeId}")

@@ -2,7 +2,9 @@ package com.dnsouzadev.algafood.domain.service;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Cidade;
+import com.dnsouzadev.algafood.domain.model.Estado;
 import com.dnsouzadev.algafood.domain.repository.CidadeRepository;
+import com.dnsouzadev.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ public class CidadeService {
 
     @Autowired
     private CidadeRepository cidadeRepository;
+    @Autowired
+    private EstadoService estadoService;
 
     public List<Cidade> listar() {
         return cidadeRepository.findAll();
@@ -24,6 +28,9 @@ public class CidadeService {
     }
 
     public Cidade salvar(Cidade cidade) {
+        Long estadoId = cidade.getEstado().getId();
+        Estado estado = estadoService.buscarOuFalhar(estadoId);
+        cidade.setEstado(estado);
         return cidadeRepository.save(cidade);
     }
 
@@ -43,6 +50,4 @@ public class CidadeService {
                 () -> new EntidadeNaoEncontradaException("Cidade não encontrada")
         );
     }
-
-
 }

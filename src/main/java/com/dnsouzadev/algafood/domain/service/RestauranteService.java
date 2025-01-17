@@ -19,7 +19,7 @@ public class RestauranteService {
     private RestauranteRepository restauranteRepository;
 
     @Autowired
-    private CozinhaRepository cozinhaRepository;
+    private CozinhaService cozinhaService;
 
     public List<Restaurante> listar() {
         return restauranteRepository.findAll();
@@ -32,7 +32,7 @@ public class RestauranteService {
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        Cozinha cozinha = buscarOuFalharCozinha(cozinhaId);
+        Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
 
         restaurante.setCozinha(cozinha);
 
@@ -48,7 +48,7 @@ public class RestauranteService {
     @Transactional
     public Restaurante atualizar(Long restauranteId, Restaurante restaurante) {
         Restaurante restauranteAtual = buscarOuFalharRestaurante(restauranteId);
-        Cozinha cozinha = buscarOuFalharCozinha(restaurante.getCozinha().getId());
+        Cozinha cozinha = cozinhaService.buscarOuFalhar(restaurante.getCozinha().getId());
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
         restauranteAtual.setCozinha(cozinha);
         return restauranteRepository.save(restauranteAtual);
@@ -61,10 +61,4 @@ public class RestauranteService {
         );
     }
 
-    public Cozinha buscarOuFalharCozinha(Long cozinhaId) {
-        return cozinhaRepository.findById(cozinhaId).orElseThrow(
-                () -> new EntidadeNaoEncontradaException(
-                        String.format("Cozinha de código %d não encontrada", cozinhaId))
-        );
-    }
 }
