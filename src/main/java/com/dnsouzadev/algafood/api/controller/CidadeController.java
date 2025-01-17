@@ -1,5 +1,7 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.model.Cidade;
 import com.dnsouzadev.algafood.domain.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,11 @@ public class CidadeController {
     @PutMapping("/{cidadeId}")
     public ResponseEntity<Cidade> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
         cidadeService.buscar(cidadeId);
-        return ResponseEntity.ok(cidadeService.atualizar(cidadeId, cidade));
+        try {
+            return ResponseEntity.ok(cidadeService.atualizar(cidadeId, cidade));
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{cidadeId}")

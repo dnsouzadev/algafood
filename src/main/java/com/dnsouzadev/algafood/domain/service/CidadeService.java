@@ -28,8 +28,7 @@ public class CidadeService {
     }
 
     public Cidade salvar(Cidade cidade) {
-        Long estadoId = cidade.getEstado().getId();
-        Estado estado = estadoService.buscarOuFalhar(estadoId);
+        Estado estado = estadoService.buscarOuFalhar(cidade.getEstado().getId());
         cidade.setEstado(estado);
         return cidadeRepository.save(cidade);
     }
