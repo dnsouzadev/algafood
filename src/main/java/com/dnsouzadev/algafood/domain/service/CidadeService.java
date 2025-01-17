@@ -1,6 +1,7 @@
 package com.dnsouzadev.algafood.domain.service;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.model.Cidade;
 import com.dnsouzadev.algafood.domain.model.Estado;
 import com.dnsouzadev.algafood.domain.repository.CidadeRepository;
@@ -36,7 +37,11 @@ public class CidadeService {
     public Cidade atualizar(Long cidadeId, Cidade cidade) {
         Cidade cidadeAtual = buscarOuFalhar(cidadeId);
         BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-        return cidadeRepository.save(cidadeAtual);
+        try {
+            return cidadeRepository.save(cidadeAtual);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     public void excluir(Long cidadeId) {

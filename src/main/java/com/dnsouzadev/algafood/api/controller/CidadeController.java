@@ -37,11 +37,7 @@ public class CidadeController {
     @PutMapping("/{cidadeId}")
     public ResponseEntity<Cidade> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
         cidadeService.buscar(cidadeId);
-        try {
-            return ResponseEntity.ok(cidadeService.atualizar(cidadeId, cidade));
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
-        }
+        return ResponseEntity.ok(cidadeService.atualizar(cidadeId, cidade));
     }
 
     @DeleteMapping("/{cidadeId}")

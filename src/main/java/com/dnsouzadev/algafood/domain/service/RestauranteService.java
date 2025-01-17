@@ -1,6 +1,7 @@
 package com.dnsouzadev.algafood.domain.service;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.model.Restaurante;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
@@ -36,7 +37,11 @@ public class RestauranteService {
 
         restaurante.setCozinha(cozinha);
 
-        return restauranteRepository.save(restaurante);
+        try {
+            return restauranteRepository.save(restaurante);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @Transactional
@@ -51,7 +56,11 @@ public class RestauranteService {
         Cozinha cozinha = cozinhaService.buscarOuFalhar(restaurante.getCozinha().getId());
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
         restauranteAtual.setCozinha(cozinha);
-        return restauranteRepository.save(restauranteAtual);
+        try {
+            return restauranteRepository.save(restauranteAtual);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     public Restaurante buscarOuFalharRestaurante(Long restauranteId) {
