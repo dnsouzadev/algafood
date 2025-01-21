@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.domain.service;
 
+import com.dnsouzadev.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.model.Cidade;
@@ -51,7 +52,7 @@ public class CidadeService {
 
     public Cidade buscarOuFalhar(Long cidadeId) {
         return cidadeRepository.findById(cidadeId).orElseThrow(
-                () -> new EntidadeNaoEncontradaException("Cidade não encontrada")
+                () -> new CidadeNaoEncontradaException(cidadeId)
         );
     }
 }

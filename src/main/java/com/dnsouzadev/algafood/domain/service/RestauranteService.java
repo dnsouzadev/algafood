@@ -2,6 +2,7 @@ package com.dnsouzadev.algafood.domain.service;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
+import com.dnsouzadev.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.model.Restaurante;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
@@ -65,8 +66,7 @@ public class RestauranteService {
 
     public Restaurante buscarOuFalharRestaurante(Long restauranteId) {
         return restauranteRepository.findById(restauranteId).orElseThrow(
-                () -> new EntidadeNaoEncontradaException(
-                        String.format("Restaurante de código %d não encontrado", restauranteId))
+                () -> new RestauranteNaoEncontradoException(restauranteId)
         );
     }
 
