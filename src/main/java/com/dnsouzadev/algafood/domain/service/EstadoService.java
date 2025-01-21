@@ -2,6 +2,7 @@ package com.dnsouzadev.algafood.domain.service;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeEmUsoException;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.dnsouzadev.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.model.Estado;
 import com.dnsouzadev.algafood.domain.repository.CidadeRepository;
 import com.dnsouzadev.algafood.domain.repository.EstadoRepository;
@@ -51,8 +52,7 @@ public class EstadoService {
 
     public Estado buscarOuFalhar(Long estadoId) {
         return estadoRepository.findById(estadoId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format("Estado de código %d não encontrado", estadoId)));
+                .orElseThrow(() -> new EstadoNaoEncontradoException(estadoId));
     }
 
 }
