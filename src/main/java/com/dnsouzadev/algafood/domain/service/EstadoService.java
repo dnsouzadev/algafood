@@ -8,6 +8,8 @@ import com.dnsouzadev.algafood.domain.repository.CidadeRepository;
 import com.dnsouzadev.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,39 +17,27 @@ import java.util.List;
 @Service
 public class EstadoService {
 
+    private static final String MSG_ESTADO_EM_USO
+            = "Estado de código %d não pode ser removido, pois está em uso";
+
     @Autowired
     private EstadoRepository estadoRepository;
-
-    @Autowired
-    private CidadeRepository cidadeRepository;
-
-    public List<Estado> listar() {
-        return estadoRepository.findAll();
-    }
-
-    public Estado buscar(Long id) {
-        return buscarOuFalhar(id);
-    }
 
     public Estado salvar(Estado estado) {
         return estadoRepository.save(estado);
     }
 
-    public Estado atualizar(Long estadoId, Estado estado) {
-        Estado estadoAtual = buscarOuFalhar(estadoId);
-        BeanUtils.copyProperties(estado, estadoAtual, "id");
-        return estadoRepository.save(estadoAtual);
-    }
-
     public void excluir(Long estadoId) {
-        Estado estado = buscarOuFalhar(estadoId);
+        try {
+            estadoRepository.deleteById(estadoId);
 
-        if (cidadeRepository.existsByEstadoId(estadoId)) {
+        } catch (EmptyResultDataAccessException e) {
+            throw new EstadoNaoEncontradoException(estadoId);
+
+        } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format("Estado de código %d não pode ser removido, pois está em uso", estadoId));
+                    String.format(MSG_ESTADO_EM_USO, estadoId));
         }
-
-        estadoRepository.delete(estado);
     }
 
     public Estado buscarOuFalhar(Long estadoId) {

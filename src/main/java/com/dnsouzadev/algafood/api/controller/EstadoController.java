@@ -2,7 +2,9 @@ package com.dnsouzadev.algafood.api.controller;
 
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Estado;
+import com.dnsouzadev.algafood.domain.repository.EstadoRepository;
 import com.dnsouzadev.algafood.domain.service.EstadoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,39 +17,41 @@ import java.util.List;
 public class EstadoController {
 
     @Autowired
+    private EstadoRepository estadoRepository;
+
+    @Autowired
     private EstadoService estadoService;
 
     @GetMapping
-    public ResponseEntity<List<Estado>> listar() {
-        return ResponseEntity.ok(estadoService.listar());
+    public List<Estado> listar() {
+        return estadoRepository.findAll();
     }
 
     @GetMapping("/{estadoId}")
-    public ResponseEntity<Estado> buscar(@PathVariable Long estadoId) {
-        if (estadoId == null) return ResponseEntity.badRequest().build();
-
-        Estado estado = estadoService.buscarOuFalhar(estadoId);
-
-        return ResponseEntity.ok(estado);
-
+    public Estado buscar(@PathVariable Long estadoId) {
+        return estadoService.buscarOuFalhar(estadoId);
     }
 
     @PostMapping
-    public ResponseEntity<Estado> adicionar(@RequestBody Estado estado) {
-        return ResponseEntity.ok(estadoService.salvar(estado));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Estado adicionar(@RequestBody Estado estado) {
+        return estadoService.salvar(estado);
     }
 
     @PutMapping("/{estadoId}")
-    public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId, @RequestBody Estado estado) {
-        estadoService.buscarOuFalhar(estadoId);
-        return ResponseEntity.ok(estadoService.atualizar(estadoId, estado));
+    public Estado atualizar(@PathVariable Long estadoId,
+                            @RequestBody Estado estado) {
+        Estado estadoAtual = estadoService.buscarOuFalhar(estadoId);
 
+        BeanUtils.copyProperties(estado, estadoAtual, "id");
+
+        return estadoService.salvar(estadoAtual);
     }
 
     @DeleteMapping("/{estadoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long estadoId) {
-        estadoService.excluir(estadoService.buscar(estadoId).getId());
+        estadoService.excluir(estadoId);
     }
 
 }

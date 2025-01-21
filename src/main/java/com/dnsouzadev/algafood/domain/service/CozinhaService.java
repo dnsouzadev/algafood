@@ -8,6 +8,7 @@ import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,32 +23,17 @@ public class CozinhaService {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
-    @Transactional(readOnly = true)
-    public List<Cozinha> listar() {
-        return cozinhaRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public Cozinha buscar(Long id) {
-        return buscarOuFalhar(id);
-    }
-
-    @Transactional
     public Cozinha salvar(Cozinha cozinha) {
         return cozinhaRepository.save(cozinha);
     }
 
-    @Transactional
-    public Cozinha atualizar(Long cozinhaId, Cozinha cozinha) {
-        Cozinha cozinhaAtual = buscarOuFalhar(cozinhaId);
-        BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-        return cozinhaRepository.save(cozinhaAtual);
-    }
-
     public void excluir(Long cozinhaId) {
         try {
-            buscarOuFalhar(cozinhaId);
             cozinhaRepository.deleteById(cozinhaId);
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new CozinhaNaoEncontradaException(cozinhaId);
+
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format(MSG_COZINHA_EM_USO, cozinhaId));

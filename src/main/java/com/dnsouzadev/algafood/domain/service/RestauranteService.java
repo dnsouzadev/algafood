@@ -23,51 +23,19 @@ public class RestauranteService {
     @Autowired
     private CozinhaService cozinhaService;
 
-    public List<Restaurante> listar() {
-        return restauranteRepository.findAll();
-    }
-
-    public Restaurante buscar(Long id) {
-        return buscarOuFalharRestaurante(id);
-    }
-
-    @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
+
         Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
 
         restaurante.setCozinha(cozinha);
 
-        try {
-            return restauranteRepository.save(restaurante);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
-        }
+        return restauranteRepository.save(restaurante);
     }
 
-    @Transactional
-    public void excluir(Long restauranteId) {
-        Restaurante restaurante = buscarOuFalharRestaurante(restauranteId);
-        restauranteRepository.delete(restaurante);
-    }
-
-    @Transactional
-    public Restaurante atualizar(Long restauranteId, Restaurante restaurante) {
-        Restaurante restauranteAtual = buscarOuFalharRestaurante(restauranteId);
-        Cozinha cozinha = cozinhaService.buscarOuFalhar(restaurante.getCozinha().getId());
-        BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
-        restauranteAtual.setCozinha(cozinha);
-        try {
-            return restauranteRepository.save(restauranteAtual);
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
-        }
-    }
-
-    public Restaurante buscarOuFalharRestaurante(Long restauranteId) {
-        return restauranteRepository.findById(restauranteId).orElseThrow(
-                () -> new RestauranteNaoEncontradoException(restauranteId)
-        );
+    public Restaurante buscarOuFalhar(Long restauranteId) {
+        return restauranteRepository.findById(restauranteId)
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
     }
 
 }
