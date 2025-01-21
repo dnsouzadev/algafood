@@ -57,4 +57,5 @@ public class CozinhaService {
     public Cozinha buscarOuFalhar(Long cozinhaId) {
         return cozinhaRepository.findById(cozinhaId)
                 .orElseThrow(() -> new CozinhaNaoEncontradaException(cozinhaId));
+    }
 }
