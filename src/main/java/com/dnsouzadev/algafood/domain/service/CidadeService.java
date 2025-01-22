@@ -40,6 +40,7 @@ public class CidadeService {
 
     public void excluir(Long cidadeId) {
         try {
+            buscarOuFalhar(cidadeId);
             cidadeRepository.deleteById(cidadeId);
 
         } catch (EmptyResultDataAccessException e) {

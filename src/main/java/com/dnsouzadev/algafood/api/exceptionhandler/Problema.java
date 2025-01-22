@@ -2,27 +2,31 @@ package com.dnsouzadev.algafood.api.exceptionhandler;
 
 import java.time.LocalDateTime;
 
-public class Problema {
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Problema {
     private LocalDateTime dataHora;
     private String mensagem;
 
-    public Problema(LocalDateTime dataHora, String mensagem) {
-        this.dataHora = dataHora;
-        this.mensagem = mensagem;
-    }
-
+    // Getters e setters
     public LocalDateTime getDataHora() {
         return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
     }
 
     public String getMensagem() {
         return mensagem;
     }
 
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
 
     public static class Builder {
-
         private LocalDateTime dataHora;
         private String mensagem;
 
@@ -37,7 +41,10 @@ public class Problema {
         }
 
         public Problema build() {
-            return new Problema(this.dataHora, this.mensagem);
+            Problema problema = new Problema();
+            problema.setDataHora(this.dataHora);
+            problema.setMensagem(this.mensagem);
+            return problema;
         }
     }
 }
