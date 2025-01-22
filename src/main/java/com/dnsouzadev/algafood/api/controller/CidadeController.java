@@ -1,6 +1,5 @@
 package com.dnsouzadev.algafood.api.controller;
 
-import com.dnsouzadev.algafood.api.exceptionhandler.Problema;
 import com.dnsouzadev.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.EstadoNaoEncontradoException;

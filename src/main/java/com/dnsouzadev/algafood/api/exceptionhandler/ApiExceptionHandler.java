@@ -20,25 +20,41 @@ import java.time.LocalDateTime;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> tratarEntidadeNaoEncontradaException(
+    public ResponseEntity<?> handleEntidadeNaoEncontradaException(
             EntidadeNaoEncontradaException ex, WebRequest request) {
 
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
-                HttpStatusCode.valueOf(404), request);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+        String detail = ex.getMessage();
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> tratarEntidadeEmUsoException(
+    public ResponseEntity<?> handleEntidadeEmUsoException(
             EntidadeEmUsoException ex, WebRequest request) {
 
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
-                HttpStatusCode.valueOf(409), request);
+        HttpStatus status = HttpStatus.CONFLICT;
+        ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
+        String detail = ex.getMessage();
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> tratarNegocioException(NegocioException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
-                HttpStatusCode.valueOf(400), request);
+    public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+        String detail = ex.getMessage();
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @Override
@@ -46,18 +62,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpStatusCode status, WebRequest request) {
 
         if (body == null) {
-            body = new Problema.Builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem(status.toString())
+            body = new Problem.builder()
+                    .title(status.toString())
+                    .status(status.value())
                     .build();
         } else if (body instanceof String) {
-            body = new Problema.Builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem((String) body)
+            body = new Problem.builder()
+                    .title((String) body)
+                    .status(status.value())
                     .build();
         }
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Problem.builder createProblemBuilder(HttpStatus status,
+                                                        ProblemType problemType, String detail) {
+
+        return new Problem.builder()
+                .status(status.value())
+                .type(problemType.getUri())
+                .title(problemType.getTitle())
+                .detail(detail);
     }
 
 }
