@@ -2,6 +2,7 @@ package com.dnsouzadev.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -30,6 +31,8 @@ public class Restaurante {
     @Column(nullable = false)
     private BigDecimal taxaFrete;
 
+    @Valid
+    @NotNull
     @ManyToOne
     @JoinColumn(nullable = false)
     private Cozinha cozinha;
