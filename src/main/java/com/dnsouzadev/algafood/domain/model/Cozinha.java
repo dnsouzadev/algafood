@@ -1,7 +1,9 @@
 package com.dnsouzadev.algafood.domain.model;
 
+import com.dnsouzadev.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -15,9 +17,10 @@ public class Cozinha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
+    @NotNull(groups = Groups.CadastroRestaurante.class)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
