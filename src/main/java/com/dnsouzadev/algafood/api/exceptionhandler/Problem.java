@@ -7,8 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Problem {
 
     private Integer status;
@@ -17,16 +18,20 @@ public class Problem {
     private String title;
     private String detail;
     private String userMessage;
+    private List<Field> fields;
 
-    private Problem(Builder builder) {
-        this.status = builder.status;
-        this.timestamp = builder.timestamp;
-        this.type = builder.type;
-        this.title = builder.title;
-        this.detail = builder.detail;
-        this.userMessage = builder.userMessage;
+    // Construtor
+    private Problem(Integer status, LocalDateTime timestamp, String type, String title, String detail, String userMessage, List<Field> fields) {
+        this.status = status;
+        this.timestamp = timestamp;
+        this.type = type;
+        this.title = title;
+        this.detail = detail;
+        this.userMessage = userMessage;
+        this.fields = fields;
     }
 
+    // Getters
     public Integer getStatus() {
         return status;
     }
@@ -51,6 +56,11 @@ public class Problem {
         return userMessage;
     }
 
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    // Builder
     public static class Builder {
         private Integer status;
         private LocalDateTime timestamp;
@@ -58,6 +68,7 @@ public class Problem {
         private String title;
         private String detail;
         private String userMessage;
+        private List<Field> fields;
 
         public Builder status(Integer status) {
             this.status = status;
@@ -89,12 +100,63 @@ public class Problem {
             return this;
         }
 
+        public Builder fields(List<Field> fields) {
+            this.fields = fields;
+            return this;
+        }
+
         public Problem build() {
-            return new Problem(this);
+            return new Problem(status, timestamp, type, title, detail, userMessage, fields);
         }
     }
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    // Classe interna Field
+    public static class Field {
+
+        private String name;
+        private String userMessage;
+
+        // Construtor
+        private Field(String name, String userMessage) {
+            this.name = name;
+            this.userMessage = userMessage;
+        }
+
+        // Getters
+        public String getName() {
+            return name;
+        }
+
+        public String getUserMessage() {
+            return userMessage;
+        }
+
+        // Builder para Field
+        public static class Builder {
+            private String name;
+            private String userMessage;
+
+            public Builder name(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public Builder userMessage(String userMessage) {
+                this.userMessage = userMessage;
+                return this;
+            }
+
+            public Field build() {
+                return new Field(name, userMessage);
+            }
+        }
+
+        public static Field.Builder builder() {
+            return new Field.Builder();
+        }
     }
 }
