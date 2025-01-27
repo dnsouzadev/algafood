@@ -1,6 +1,7 @@
 package com.dnsouzadev.algafood.domain.model;
 
 import com.dnsouzadev.algafood.core.validation.Groups;
+import com.dnsouzadev.algafood.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class Restaurante {
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero(message = "{TaxaFrete.invalida}")
+    @TaxaFrete
     @Column(nullable = false)
     private BigDecimal taxaFrete;
 
