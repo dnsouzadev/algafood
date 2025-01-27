@@ -1,4 +1,4 @@
-package com.dnsouzadev.algafood;
+package com.dnsouzadev.algafood.core.validation;
 
 public interface Groups {
     public interface CadastroRestaurante {}
