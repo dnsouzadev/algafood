@@ -13,20 +13,18 @@ public class Problem {
     private String title;
     private String detail;
     private String userMessage;
-    private List<Field> fields;
+    private List<Object> objects;
 
-    // Construtor
-    private Problem(Integer status, LocalDateTime timestamp, String type, String title, String detail, String userMessage, List<Field> fields) {
+    private Problem(Integer status, LocalDateTime timestamp, String type, String title, String detail, String userMessage, List<Object> objects) {
         this.status = status;
         this.timestamp = timestamp;
         this.type = type;
         this.title = title;
         this.detail = detail;
         this.userMessage = userMessage;
-        this.fields = fields;
+        this.objects = objects;
     }
 
-    // Getters
     public Integer getStatus() {
         return status;
     }
@@ -51,11 +49,10 @@ public class Problem {
         return userMessage;
     }
 
-    public List<Field> getFields() {
-        return fields;
+    public List<Object> getObjects() {
+        return objects;
     }
 
-    // Builder
     public static class Builder {
         private Integer status;
         private LocalDateTime timestamp;
@@ -63,7 +60,7 @@ public class Problem {
         private String title;
         private String detail;
         private String userMessage;
-        private List<Field> fields;
+        private List<Object> objects;
 
         public Builder status(Integer status) {
             this.status = status;
@@ -95,13 +92,12 @@ public class Problem {
             return this;
         }
 
-        public Builder fields(List<Field> fields) {
-            this.fields = fields;
+        public Builder objects(List<Object> objects) {
             return this;
         }
 
         public Problem build() {
-            return new Problem(status, timestamp, type, title, detail, userMessage, fields);
+            return new Problem(status, timestamp, type, title, detail, userMessage, objects);
         }
     }
 
@@ -109,19 +105,16 @@ public class Problem {
         return new Builder();
     }
 
-    // Classe interna Field
-    public static class Field {
+    public static class Object {
 
         private String name;
         private String userMessage;
 
-        // Construtor
-        private Field(String name, String userMessage) {
+        private Object(String name, String userMessage) {
             this.name = name;
             this.userMessage = userMessage;
         }
 
-        // Getters
         public String getName() {
             return name;
         }
@@ -130,7 +123,6 @@ public class Problem {
             return userMessage;
         }
 
-        // Builder para Field
         public static class Builder {
             private String name;
             private String userMessage;
@@ -145,13 +137,13 @@ public class Problem {
                 return this;
             }
 
-            public Field build() {
-                return new Field(name, userMessage);
+            public Object build() {
+                return new Object(name, userMessage);
             }
         }
 
-        public static Field.Builder builder() {
-            return new Field.Builder();
+        public static Object.Builder builder() {
+            return new Object.Builder();
         }
     }
 }
