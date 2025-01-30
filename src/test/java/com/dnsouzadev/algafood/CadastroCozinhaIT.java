@@ -4,7 +4,6 @@ import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ class CadastroCozinhaIT {
         RestAssured.basePath = "/cozinhas";
 
         jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource(
-                "/json/cozinha-chinesa.json");
+                "/json/correto/cozinha-chinesa.json");
 
         databaseCleaner.clearTables();
         prepararDados();
