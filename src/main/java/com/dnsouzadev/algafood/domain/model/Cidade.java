@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
