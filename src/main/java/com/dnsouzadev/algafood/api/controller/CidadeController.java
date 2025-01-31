@@ -22,14 +22,11 @@ import java.util.List;
 public class CidadeController {
 
     @Autowired
-    private CidadeRepository cidadeRepository;
-
-    @Autowired
     private CidadeService cidadeService;
 
     @GetMapping
     public List<Cidade> listar() {
-        return cidadeRepository.findAll();
+        return cidadeService.listar();
     }
 
     @GetMapping("/{cidadeId}")

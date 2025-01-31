@@ -23,6 +23,7 @@ public class RestauranteService {
     @Autowired
     private CozinhaService cozinhaService;
 
+    @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
 
