@@ -1,5 +1,7 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.api.model.CozinhaModel;
+import com.dnsouzadev.algafood.api.model.RestauranteModel;
 import com.dnsouzadev.algafood.core.validation.ValidacaoException;
 import com.dnsouzadev.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
@@ -44,8 +46,16 @@ public class RestauranteController {
     }
 
     @GetMapping("/{restauranteId}")
-    public Restaurante buscar(@PathVariable Long restauranteId) {
-        return restauranteService.buscarOuFalhar(restauranteId);
+    public RestauranteModel buscar(@PathVariable Long restauranteId) {
+        Restaurante restaurante =  restauranteService.buscarOuFalhar(restauranteId);
+        RestauranteModel restauranteModel = new RestauranteModel();
+        restauranteModel.setId(restaurante.getId());
+        restauranteModel.setNome(restaurante.getNome());
+        restauranteModel.setTaxaFrete(restaurante.getTaxaFrete());
+        restauranteModel.setCozinha(new CozinhaModel());
+        restauranteModel.getCozinha().setId(restaurante.getCozinha().getId());
+        restauranteModel.getCozinha().setNome(restaurante.getCozinha().getNome());
+        return restauranteModel;
     }
 
     @PostMapping
