@@ -33,6 +33,7 @@ public class CozinhaService {
         try {
             buscarOuFalhar(cozinhaId);
             cozinhaRepository.deleteById(cozinhaId);
+            cozinhaRepository.flush();
 
         } catch (EmptyResultDataAccessException e) {
             throw new CozinhaNaoEncontradaException(cozinhaId);

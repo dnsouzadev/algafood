@@ -32,7 +32,9 @@ public class EstadoService {
     @Transactional
     public void excluir(Long estadoId) {
         try {
+            buscarOuFalhar(estadoId);
             estadoRepository.deleteById(estadoId);
+            estadoRepository.flush();
 
         } catch (EmptyResultDataAccessException e) {
             throw new EstadoNaoEncontradoException(estadoId);

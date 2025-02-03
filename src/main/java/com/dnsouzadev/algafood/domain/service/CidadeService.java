@@ -49,6 +49,7 @@ public class CidadeService {
         try {
             buscarOuFalhar(cidadeId);
             cidadeRepository.deleteById(cidadeId);
+            cidadeRepository.flush();
 
         } catch (EmptyResultDataAccessException e) {
             throw new CidadeNaoEncontradaException(cidadeId);
