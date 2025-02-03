@@ -1,5 +1,9 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.api.assembler.EstadoInputDisassemble;
+import com.dnsouzadev.algafood.api.assembler.EstadoModelAssembler;
+import com.dnsouzadev.algafood.api.model.EstadoModel;
+import com.dnsouzadev.algafood.api.model.input.EstadoInput;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.model.Estado;
 import com.dnsouzadev.algafood.domain.repository.EstadoRepository;
@@ -22,30 +26,37 @@ public class EstadoController {
     @Autowired
     private EstadoService estadoService;
 
+    @Autowired
+    private EstadoModelAssembler estadoModelAssembler;
+
+    @Autowired
+    private EstadoInputDisassemble estadoInputDisassemble;
+
     @GetMapping
-    public List<Estado> listar() {
-        return estadoRepository.findAll();
+    public List<EstadoModel> listar() {
+        return estadoModelAssembler.toCollectionModel(estadoRepository.findAll());
     }
 
     @GetMapping("/{estadoId}")
-    public Estado buscar(@PathVariable Long estadoId) {
-        return estadoService.buscarOuFalhar(estadoId);
+    public EstadoModel buscar(@PathVariable Long estadoId) {
+        return estadoModelAssembler.toModel(estadoService.buscarOuFalhar(estadoId));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Estado adicionar(@RequestBody Estado estado) {
-        return estadoService.salvar(estado);
+    public EstadoModel adicionar(@RequestBody EstadoInput estadoInput) {
+        Estado estado = estadoInputDisassemble.toDomainObject(estadoInput);
+        return estadoModelAssembler.toModel(estadoService.salvar(estado));
     }
 
     @PutMapping("/{estadoId}")
-    public Estado atualizar(@PathVariable Long estadoId,
-                            @RequestBody Estado estado) {
+    public EstadoModel atualizar(@PathVariable Long estadoId,
+                            @RequestBody EstadoInput estadoInput) {
         Estado estadoAtual = estadoService.buscarOuFalhar(estadoId);
 
-        BeanUtils.copyProperties(estado, estadoAtual, "id");
+        estadoInputDisassemble.copyToDomainObject(estadoInput, estadoAtual);
 
-        return estadoService.salvar(estadoAtual);
+        return estadoModelAssembler.toModel(estadoService.salvar(estadoAtual));
     }
 
     @DeleteMapping("/{estadoId}")
