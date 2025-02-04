@@ -1,6 +1,7 @@
 package com.dnsouzadev.algafood.api.assembler;
 
 import com.dnsouzadev.algafood.api.model.input.RestauranteInput;
+import com.dnsouzadev.algafood.domain.model.Cidade;
 import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
@@ -20,6 +21,10 @@ public class RestauranteInputDisassemble {
     public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
         // para evitar org.hibernate.HibernateException: identifier of an instance of com.dnsouzadev.algafood.domain.model.Cozinha was altered from 1 to 2
         restaurante.setCozinha(new Cozinha());
+
+        if (restaurante.getEndereco() != null)
+            restaurante.getEndereco().setCidade(new Cidade());
+
         modelMapper.map(restauranteInput, restaurante);
     }
 }
