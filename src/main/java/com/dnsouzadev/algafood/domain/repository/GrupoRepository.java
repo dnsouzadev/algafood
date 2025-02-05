@@ -1,9 +1,9 @@
 package com.dnsouzadev.algafood.domain.repository;
 
-import com.dnsouzadev.algafood.domain.model.FormaPagamento;
+import com.dnsouzadev.algafood.domain.model.Grupo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FormaPagamentoRepository extends JpaRepository<FormaPagamento, Long> {
+public interface GrupoRepository extends JpaRepository<Grupo, Long> {
 }
