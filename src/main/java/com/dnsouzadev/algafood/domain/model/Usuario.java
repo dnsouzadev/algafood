@@ -91,4 +91,8 @@ public class Usuario {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    public boolean checkSenha(String senhaAtual) {
+        return senha.equals(senhaAtual);
+    }
 }
