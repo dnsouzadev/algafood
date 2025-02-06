@@ -4,11 +4,13 @@ import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.model.Usuario;
 import com.dnsouzadev.algafood.domain.repository.UsuarioRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -16,12 +18,25 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EntityManager manager;
+
     public List<Usuario> listar() {
         return usuarioRepository.findAll();
     }
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
+
+        manager.detach(usuario);
+
+        Optional<Usuario> usuarioExistente = buscarEmail(usuario.getEmail());
+
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
+            throw new NegocioException(
+                    String.format("Já existe um usuário cadastrado com o e-mail %s", usuario.getEmail()));
+        }
+
         return usuarioRepository.save(usuario);
     }
 
@@ -30,8 +45,8 @@ public class UsuarioService {
         usuarioRepository.delete(buscarOuFalhar(usuarioId));
     }
 
-    public Usuario buscarEmail(String email) {
-        return usuarioRepository.findByEmail(email).orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com e-mail: " + email));
+    public Optional<Usuario> buscarEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
     @Transactional
