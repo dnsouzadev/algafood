@@ -1,12 +1,7 @@
 package com.dnsouzadev.algafood.domain.model;
 
-import com.dnsouzadev.algafood.core.validation.Groups;
-import com.dnsouzadev.algafood.core.validation.TaxaFrete;;
+;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import jakarta.validation.groups.ConvertGroup;
-import jakarta.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
@@ -157,11 +152,16 @@ public class Restaurante {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
-    public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
-        return getFormasPagamento().add(formaPagamento);
+    public void adicionarFormaPagamento(FormaPagamento formaPagamento) {
+        getFormasPagamento().add(formaPagamento);
     }
 
     public void removerFormaPagamento(FormaPagamento formaPagamento) {
         getFormasPagamento().remove(formaPagamento);
+    }
+
+    public void adicionarProduto(Produto produto) {
+        getProdutos().add(produto);
+        produto.setRestaurante(this);
     }
 }
