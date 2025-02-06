@@ -12,9 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Restaurante {
@@ -50,7 +48,7 @@ public class Restaurante {
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-    private List<FormaPagamento> formasPagamento = new ArrayList<>();
+    private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
@@ -87,11 +85,11 @@ public class Restaurante {
         this.cozinha = cozinha;
     }
 
-    public List<FormaPagamento> getFormasPagamento() {
+    public Set<FormaPagamento> getFormasPagamento() {
         return formasPagamento;
     }
 
-    public void setFormasPagamento(List<FormaPagamento> formasPagamento) {
+    public void setFormasPagamento(Set<FormaPagamento> formasPagamento) {
         this.formasPagamento = formasPagamento;
     }
 
@@ -157,5 +155,13 @@ public class Restaurante {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasPagamento().add(formaPagamento);
+    }
+
+    public void removerFormaPagamento(FormaPagamento formaPagamento) {
+        getFormasPagamento().remove(formaPagamento);
     }
 }
