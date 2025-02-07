@@ -1,11 +1,15 @@
 package com.dnsouzadev.algafood.domain.service;
 
+import com.dnsouzadev.algafood.api.model.UsuarioModel;
 import com.dnsouzadev.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.model.*;
 import com.dnsouzadev.algafood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class RestauranteService {
@@ -18,6 +22,9 @@ public class RestauranteService {
 
     @Autowired
     private CidadeService cidadeService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Autowired
     private FormaPagamentoService formaPagamentoService;
@@ -78,6 +85,28 @@ public class RestauranteService {
         Restaurante restaurante = buscarOuFalhar(restauranteId);
 
         restaurante.fechar();
+    }
+
+    public Set<Usuario> listarUsuariosResponsaveis(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+
+        return restaurante.getResponsaveis();
+    }
+
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+        restaurante.removerResponsavel(usuario);
+    }
+
+    @Transactional
+    public void associarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = usuarioService.buscarOuFalhar(usuarioId);
+
+        restaurante.adicionarResponsavel(usuario);
     }
 
     public Restaurante buscarOuFalhar(Long restauranteId) {
