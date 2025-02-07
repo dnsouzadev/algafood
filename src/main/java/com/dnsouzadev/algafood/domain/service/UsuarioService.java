@@ -2,6 +2,7 @@ package com.dnsouzadev.algafood.domain.service;
 
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.exception.UsuarioNaoEncontradoException;
+import com.dnsouzadev.algafood.domain.model.Grupo;
 import com.dnsouzadev.algafood.domain.model.Usuario;
 import com.dnsouzadev.algafood.domain.repository.UsuarioRepository;
 import jakarta.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UsuarioService {
@@ -59,6 +61,28 @@ public class UsuarioService {
 
         usuario.setSenha(novaSenha);
         usuarioRepository.saveAndFlush(usuario);
+    }
+
+    // Grupos associados ao usuário
+    public Set<Grupo> buscarGrupos(Long usuarioId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        return usuario.getGrupos();
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = manager.find(Grupo.class, grupoId);
+
+        usuario.adicionarGrupo(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarOuFalhar(usuarioId);
+        Grupo grupo = manager.find(Grupo.class, grupoId);
+
+        usuario.removerGrupo(grupo);
     }
 
     public Usuario buscarOuFalhar(Long usuarioId) {

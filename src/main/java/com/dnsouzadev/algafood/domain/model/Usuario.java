@@ -3,11 +3,8 @@ package com.dnsouzadev.algafood.domain.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Usuario {
@@ -30,7 +27,7 @@ public class Usuario {
     @JoinTable(name = "usuario_grupo",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-    private List<Grupo> grupos = new ArrayList<>();
+    private Set<Grupo> grupos = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -72,12 +69,20 @@ public class Usuario {
         this.dataCadastro = dataCadastro;
     }
 
-    public List<Grupo> getGrupos() {
+    public Set<Grupo> getGrupos() {
         return grupos;
     }
 
-    public void setGrupos(List<Grupo> grupos) {
+    public void setGrupos(Set<Grupo> grupos) {
         this.grupos = grupos;
+    }
+
+    public void removerGrupo(Grupo grupo) {
+        getGrupos().remove(grupo);
+    }
+
+    public void adicionarGrupo(Grupo grupo) {
+        getGrupos().add(grupo);
     }
 
     @Override
