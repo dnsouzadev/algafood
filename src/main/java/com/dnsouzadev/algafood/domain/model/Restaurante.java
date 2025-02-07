@@ -31,6 +31,8 @@ public class Restaurante {
 
     private Boolean ativo = Boolean.TRUE;
 
+    private Boolean aberto = Boolean.FALSE;
+
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataCadastro;
@@ -128,12 +130,36 @@ public class Restaurante {
         this.ativo = ativo;
     }
 
+    public Boolean getAberto() {
+        return aberto;
+    }
+
+    public void setAberto(Boolean abertura) {
+        this.aberto = abertura;
+    }
+
+    public void adicionarFormaPagamento(FormaPagamento formaPagamento) {
+        getFormasPagamento().add(formaPagamento);
+    }
+
+    public void removerFormaPagamento(FormaPagamento formaPagamento) {
+        getFormasPagamento().remove(formaPagamento);
+    }
+
     public void ativar() {
         setAtivo(true);
     }
 
     public void inativar() {
         setAtivo(false);
+    }
+
+    public void abrir() {
+        setAberto(true);
+    }
+
+    public void fechar() {
+        setAberto(false);
     }
 
     @Override
@@ -150,18 +176,5 @@ public class Restaurante {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
-    }
-
-    public void adicionarFormaPagamento(FormaPagamento formaPagamento) {
-        getFormasPagamento().add(formaPagamento);
-    }
-
-    public void removerFormaPagamento(FormaPagamento formaPagamento) {
-        getFormasPagamento().remove(formaPagamento);
-    }
-
-    public void adicionarProduto(Produto produto) {
-        getProdutos().add(produto);
-        produto.setRestaurante(this);
     }
 }

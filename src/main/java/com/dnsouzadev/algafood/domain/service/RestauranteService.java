@@ -1,18 +1,11 @@
 package com.dnsouzadev.algafood.domain.service;
 
-import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.dnsouzadev.algafood.domain.exception.NegocioException;
-import com.dnsouzadev.algafood.domain.exception.ProdutoNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.model.*;
-import com.dnsouzadev.algafood.domain.repository.CozinhaRepository;
 import com.dnsouzadev.algafood.domain.repository.RestauranteRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class RestauranteService {
@@ -74,12 +67,17 @@ public class RestauranteService {
     }
 
     @Transactional
-    public Produto adicionarProduto(Long restauranteId, Produto produto) {
+    public void abrirRestaurante(Long restauranteId) {
         Restaurante restaurante = buscarOuFalhar(restauranteId);
 
-        restaurante.adicionarProduto(produto);
+        restaurante.abrir();
+    }
 
-        return produto;
+    @Transactional
+    public void fecharRestaurante(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+
+        restaurante.fechar();
     }
 
     public Restaurante buscarOuFalhar(Long restauranteId) {
@@ -87,12 +85,4 @@ public class RestauranteService {
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
     }
 
-    public Produto buscarProdutoOuFalhar(Long restauranteId, Long produtoId) {
-        Restaurante restaurante = buscarOuFalhar(restauranteId);
-
-        return restaurante.getProdutos().stream()
-                .filter(produto -> produto.getId().equals(produtoId))
-                .findFirst()
-                .orElseThrow(() -> new ProdutoNaoEncontradoException(restauranteId, produtoId));
-    }
 }
