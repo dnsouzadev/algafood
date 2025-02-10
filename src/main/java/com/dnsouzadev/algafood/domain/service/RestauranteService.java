@@ -58,6 +58,17 @@ public class RestauranteService {
     }
 
     @Transactional
+    public void ativarVarios(List<Long> restauranteIds) {
+        restauranteIds.forEach(this::ativar);
+    }
+
+    @Transactional
+    public void inativarVarios(List<Long> restauranteIds) {
+        restauranteIds.forEach(this::inativar);
+    }
+
+
+    @Transactional
     public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
         Restaurante restaurante = buscarOuFalhar(restauranteId);
         FormaPagamento formaPagamento = formaPagamentoService.buscarOuFalhar(formaPagamentoId);
