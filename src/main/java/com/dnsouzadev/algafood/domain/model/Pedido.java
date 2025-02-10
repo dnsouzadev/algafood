@@ -49,7 +49,7 @@ public class Pedido {
     @JoinColumn(name = "usuario_cliente_id", nullable = false)
     private Usuario cliente;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens = new ArrayList<>();
 
     public Pedido(Long id, BigDecimal subtotal, BigDecimal taxaFrete, Endereco enderecoEntrega, BigDecimal valorTotal, StatusPedido status, OffsetDateTime dataCriacao, OffsetDateTime dataConfirmacao, OffsetDateTime dataCancelamento, OffsetDateTime dataEntrega, FormaPagamento formaPagamento, Restaurante restaurante, Usuario cliente, List<ItemPedido> itens) {
@@ -193,5 +193,15 @@ public class Pedido {
     @Override
     public int hashCode() {
         return Objects.hash(id, subtotal, taxaFrete, valorTotal, enderecoEntrega, status, dataCriacao, dataConfirmacao, dataCancelamento, dataEntrega, formaPagamento, restaurante, cliente, itens);
+    }
+
+    public void calcularValorTotal() {
+        getItens().forEach(ItemPedido::calcularPrecoTotal);
+
+        this.subtotal = getItens().stream()
+                .map(ItemPedido::getPrecoTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.valorTotal = this.subtotal.add(this.taxaFrete);
     }
 }

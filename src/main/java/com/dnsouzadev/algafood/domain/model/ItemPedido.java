@@ -107,4 +107,19 @@ public class ItemPedido {
     public int hashCode() {
         return Objects.hash(id, precoUnitario, precoTotal, quantidade, observacao, pedido, produto);
     }
+
+    public void calcularPrecoTotal() {
+        BigDecimal precoUnitario = this.getPrecoUnitario();
+        Integer quantidade = this.getQuantidade();
+
+        if (precoUnitario == null) {
+            precoUnitario = BigDecimal.ZERO;
+        }
+
+        if (quantidade == null) {
+            quantidade = 0;
+        }
+
+        this.setPrecoTotal(precoUnitario.multiply(new BigDecimal(quantidade)));
+    }
 }
