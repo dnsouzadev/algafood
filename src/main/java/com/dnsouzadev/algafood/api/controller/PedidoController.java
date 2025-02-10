@@ -1,7 +1,9 @@
 package com.dnsouzadev.algafood.api.controller;
 
 import com.dnsouzadev.algafood.api.assembler.PedidoModelAssembler;
+import com.dnsouzadev.algafood.api.assembler.PedidoResumoModelAssembler;
 import com.dnsouzadev.algafood.api.model.PedidoModel;
+import com.dnsouzadev.algafood.api.model.PedidoResumoModel;
 import com.dnsouzadev.algafood.domain.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +23,12 @@ public class PedidoController {
     @Autowired
     private PedidoModelAssembler pedidoModelAssembler;
 
+    @Autowired
+    private PedidoResumoModelAssembler pedidoResumoModelAssembler;
+
     @GetMapping
-    public List<PedidoModel> listar() {
-        return pedidoModelAssembler.toCollectionModel(pedidoService.listar());
+    public List<PedidoResumoModel> listar() {
+        return pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar());
     }
 
     @GetMapping("/{pedidoId}")
