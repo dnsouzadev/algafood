@@ -28,8 +28,9 @@ public class RestauranteProdutosController {
     private ProdutoInputDisassemble produtoInputDisassemble;
 
     @GetMapping
-    public List<ProdutoModel> listar(@PathVariable Long restauranteId) {
-        return produtoModelAssembler.toCollectionModel(produtoService.listar(restauranteId));
+    public List<ProdutoModel> listar(@PathVariable Long restauranteId,
+                                     @RequestParam(required = false) boolean incluirInativos) {
+        return produtoModelAssembler.toCollectionModel(produtoService.listar(restauranteId, incluirInativos));
     }
 
     @GetMapping("/{produtoId}")

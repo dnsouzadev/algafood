@@ -19,10 +19,12 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public List<Produto> listar(Long restauranteId) {
+    public List<Produto> listar(Long restauranteId, boolean incluirInativos) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(restauranteId);
-
-        return produtoRepository.findByRestaurante(restaurante);
+        if (incluirInativos) {
+            return produtoRepository.findByRestaurante(restaurante);
+        }
+        return produtoRepository.findAtivoByRestaurante(restaurante);
     }
 
     @Transactional
