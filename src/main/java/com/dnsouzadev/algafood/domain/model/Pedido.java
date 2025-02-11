@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import jakarta.persistence.*;
@@ -20,6 +21,8 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String codigo;
 
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
@@ -53,24 +56,15 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedido> itens = new ArrayList<>();
 
-    public Pedido(Long id, BigDecimal subtotal, BigDecimal taxaFrete, Endereco enderecoEntrega, BigDecimal valorTotal, StatusPedido status, OffsetDateTime dataCriacao, OffsetDateTime dataConfirmacao, OffsetDateTime dataCancelamento, OffsetDateTime dataEntrega, FormaPagamento formaPagamento, Restaurante restaurante, Usuario cliente, List<ItemPedido> itens) {
-        this.id = id;
-        this.subtotal = subtotal;
-        this.taxaFrete = taxaFrete;
-        this.enderecoEntrega = enderecoEntrega;
-        this.valorTotal = valorTotal;
-        this.status = status;
-        this.dataCriacao = dataCriacao;
-        this.dataConfirmacao = dataConfirmacao;
-        this.dataCancelamento = dataCancelamento;
-        this.dataEntrega = dataEntrega;
-        this.formaPagamento = formaPagamento;
-        this.restaurante = restaurante;
-        this.cliente = cliente;
-        this.itens = itens;
+    public Pedido() {}
+
+    public String getCodigo() {
+        return codigo;
     }
 
-    public Pedido() {}
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public Long getId() {
         return id;
@@ -119,8 +113,8 @@ public class Pedido {
     public void setStatus(StatusPedido status) {
         if (getStatus().naoPodeAlterarPara(status)) {
             throw new NegocioException(
-                    String.format("Status do pedido %d não pode ser alterado de %s para %s",
-                            getId(), getStatus().getDescricao(), status.getDescricao()));
+                    String.format("Status do pedido %s não pode ser alterado de %s para %s",
+                            getCodigo(), getStatus().getDescricao(), status.getDescricao()));
         }
 
         this.status = status;

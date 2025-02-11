@@ -5,10 +5,11 @@ import com.dnsouzadev.algafood.domain.model.StatusPedido;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class PedidoModel {
 
-    private Long id;
+    private String codigo;
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;
@@ -23,12 +24,12 @@ public class PedidoModel {
     private EnderecoModel enderecoEntrega;
     private List<ItemPedidoModel> itens;
 
-    public Long getId() {
-        return id;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public BigDecimal getSubtotal() {

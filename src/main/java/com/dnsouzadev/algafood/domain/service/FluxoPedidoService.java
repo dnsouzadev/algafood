@@ -1,13 +1,10 @@
 package com.dnsouzadev.algafood.domain.service;
 
-import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.model.Pedido;
 import com.dnsouzadev.algafood.domain.model.StatusPedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.OffsetDateTime;
 
 @Service
 public class FluxoPedidoService {
@@ -16,20 +13,20 @@ public class FluxoPedidoService {
     private PedidoService pedidoService;
 
     @Transactional
-    public void confirmar(Long pedidoId) {
-        Pedido pedido = pedidoService.buscarOuFalhar(pedidoId);
+    public void confirmar(String codigoPedido) {
+        Pedido pedido = pedidoService.buscarOuFalhar(codigoPedido);
         pedido.confirmar();
     }
 
     @Transactional
-    public void entregar(Long pedidoId) {
-        Pedido pedido = pedidoService.buscarOuFalhar(pedidoId);
+    public void entregar(String codigoPedido) {
+        Pedido pedido = pedidoService.buscarOuFalhar(codigoPedido);
         pedido.entregar();
     }
 
     @Transactional
-    public void cancelar(Long pedidoId) {
-        Pedido pedido = pedidoService.buscarOuFalhar(pedidoId);
+    public void cancelar(String codigoPedido) {
+        Pedido pedido = pedidoService.buscarOuFalhar(codigoPedido);
         pedido.setStatus(StatusPedido.CANCELADO);
     }
 
