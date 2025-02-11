@@ -4,6 +4,7 @@ import com.dnsouzadev.algafood.api.assembler.RestauranteInputDisassemble;
 import com.dnsouzadev.algafood.api.assembler.RestauranteModelAssembler;
 import com.dnsouzadev.algafood.api.model.RestauranteModel;
 import com.dnsouzadev.algafood.api.model.input.RestauranteInput;
+import com.dnsouzadev.algafood.api.model.view.RestauranteView;
 import com.dnsouzadev.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
@@ -11,6 +12,7 @@ import com.dnsouzadev.algafood.domain.exception.RestauranteNaoEncontradoExceptio
 import com.dnsouzadev.algafood.domain.model.Restaurante;
 import com.dnsouzadev.algafood.domain.repository.RestauranteRepository;
 import com.dnsouzadev.algafood.domain.service.RestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,15 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputDisassemble restauranteInputDisassemble;
 
+    @JsonView(RestauranteView.Resumo.class)
     @GetMapping
     public List<RestauranteModel> listar() {
+        return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+    }
+
+    @JsonView(RestauranteView.ApenasNome.class)
+    @GetMapping(params = "projecao=apenas-nome")
+    public List<RestauranteModel> listarApenasNome() {
         return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
     }
 
