@@ -1,12 +1,14 @@
 package com.dnsouzadev.algafood.api.model;
 
 import com.dnsouzadev.algafood.domain.model.StatusPedido;
+import com.fasterxml.jackson.annotation.JsonFilter;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@JsonFilter("pedidoFilter")
 public class PedidoResumoModel {
 
     private String codigo;
