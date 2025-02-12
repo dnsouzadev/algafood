@@ -8,8 +8,10 @@ import com.dnsouzadev.algafood.api.model.PedidoResumoModel;
 import com.dnsouzadev.algafood.api.model.input.PedidoInput;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
+import com.dnsouzadev.algafood.domain.infrastructure.spec.PedidoSpecs;
 import com.dnsouzadev.algafood.domain.model.Pedido;
 import com.dnsouzadev.algafood.domain.model.Usuario;
+import com.dnsouzadev.algafood.domain.repository.filter.PedidoFilter;
 import com.dnsouzadev.algafood.domain.service.PedidoService;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -39,8 +41,8 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
 
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        return pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar());
+    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+        return pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar(PedidoSpecs.usandoFiltro(filtro)));
     }
 
 //    @GetMapping

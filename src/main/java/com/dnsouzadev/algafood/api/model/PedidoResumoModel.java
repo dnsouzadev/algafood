@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@JsonFilter("pedidoFilter")
+//@JsonFilter("pedidoFilter")
 public class PedidoResumoModel {
 
     private String codigo;

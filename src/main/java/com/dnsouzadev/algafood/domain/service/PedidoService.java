@@ -5,6 +5,7 @@ import com.dnsouzadev.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.dnsouzadev.algafood.domain.model.*;
 import com.dnsouzadev.algafood.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,8 @@ public class PedidoService {
     @Autowired
     private FormaPagamentoService formaPagamentoService;
 
-    public List<Pedido> listar() {
-        return pedidoRepository.findAll();
+    public List<Pedido> listar(Specification<Pedido> spec) {
+        return pedidoRepository.findAll(spec);
     }
 
     @Transactional
