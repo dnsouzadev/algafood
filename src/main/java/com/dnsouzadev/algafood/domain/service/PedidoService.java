@@ -32,10 +32,6 @@ public class PedidoService {
     @Autowired
     private FormaPagamentoService formaPagamentoService;
 
-    public List<Pedido> listar(Specification<Pedido> spec) {
-        return pedidoRepository.findAll(spec);
-    }
-
     @Transactional
     public Pedido emitir(Pedido pedido) {
         validarPedido(pedido);

@@ -11,6 +11,7 @@ import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.infrastructure.spec.PedidoSpecs;
 import com.dnsouzadev.algafood.domain.model.Pedido;
 import com.dnsouzadev.algafood.domain.model.Usuario;
+import com.dnsouzadev.algafood.domain.repository.PedidoRepository;
 import com.dnsouzadev.algafood.domain.repository.filter.PedidoFilter;
 import com.dnsouzadev.algafood.domain.service.PedidoService;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -18,6 +19,11 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +33,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     @Autowired
     private PedidoService pedidoService;
@@ -41,8 +50,10 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
 
     @GetMapping
-    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
-        return pedidoResumoModelAssembler.toCollectionModel(pedidoService.listar(PedidoSpecs.usandoFiltro(filtro)));
+    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+        List<PedidoResumoModel> pedidosResumoList = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
+        return new PageImpl<>(pedidosResumoList, pageable, pedidosPage.getTotalElements());
     }
 
 //    @GetMapping
