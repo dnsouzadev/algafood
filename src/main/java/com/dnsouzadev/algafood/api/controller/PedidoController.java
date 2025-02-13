@@ -6,6 +6,7 @@ import com.dnsouzadev.algafood.api.assembler.PedidoResumoModelAssembler;
 import com.dnsouzadev.algafood.api.model.PedidoModel;
 import com.dnsouzadev.algafood.api.model.PedidoResumoModel;
 import com.dnsouzadev.algafood.api.model.input.PedidoInput;
+import com.dnsouzadev.algafood.core.data.PageableTranslator;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.infrastructure.spec.PedidoSpecs;
@@ -29,6 +30,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -51,29 +53,11 @@ public class PedidoController {
 
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+        pageable = traduzirPageable(pageable);
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
         List<PedidoResumoModel> pedidosResumoList = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
         return new PageImpl<>(pedidosResumoList, pageable, pedidosPage.getTotalElements());
     }
-
-//    @GetMapping
-//    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
-//        List<Pedido> pedidos = pedidoService.listar();
-//        List<PedidoResumoModel> pedidosResumo = pedidoResumoModelAssembler.toCollectionModel(pedidos);
-//
-//        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosResumo);
-//
-//        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-//        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
-//
-//        if (StringUtils.isNotBlank(campos)) {
-//            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
-//        }
-//
-//        pedidosWrapper.setFilters(filterProvider);
-//
-//        return pedidosWrapper;
-//    }
 
     @GetMapping("/{codigoPedido}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
@@ -96,6 +80,16 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable) {
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "restaurante.nome", "restaurante.nome",
+                "cliente.nome", "cliente.nome",
+                "valorTotal", "valorTotal"
+        );
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 
 }
