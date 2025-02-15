@@ -1,27 +1,18 @@
-package com.dnsouzadev.algafood.domain.repository.filter;
+package com.dnsouzadev.algafood.domain.filter;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
 
-public class PedidoFilter {
+public class VendaDiariaFilter {
 
-    private Long clienteId;
     private Long restauranteId;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private OffsetDateTime dataCriacaoInicio;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private OffsetDateTime dataCriacaoFim;
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
 
     public Long getRestauranteId() {
         return restauranteId;
