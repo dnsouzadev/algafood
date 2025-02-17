@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class RestauranteProdutoFotoController {
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
-                                          @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) {
+                                          @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
 
         Produto produto = produtoService.buscarOuFalhar(restauranteId, produtoId);
 
@@ -44,7 +45,7 @@ public class RestauranteProdutoFotoController {
         foto.setContentType(fotoProdutoInput.getArquivo().getContentType());
         foto.setTamanho(fotoProdutoInput.getArquivo().getSize());
 
-        FotoProduto fotoSalva = fotoProdutoService.salvar(foto);
+        FotoProduto fotoSalva = fotoProdutoService.salvar(foto, fotoProdutoInput.getArquivo().getInputStream());
 
         return fotoProdutoModelAssembler.toModel(fotoSalva);
     }
