@@ -1,4 +1,4 @@
-package com.dnsouzadev.algafood.domain.infrastructure.service;
+package com.dnsouzadev.algafood.domain.infrastructure.service.query;
 
 import com.dnsouzadev.algafood.domain.filter.VendaDiariaFilter;
 import com.dnsouzadev.algafood.domain.model.Pedido;
@@ -8,7 +8,6 @@ import com.dnsouzadev.algafood.domain.service.VendaQueryService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

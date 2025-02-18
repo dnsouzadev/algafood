@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.core.storage;
 
+import com.amazonaws.regions.Regions;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +45,7 @@ public class StorageProperties {
         private String idChaveAcesso;
         private String chaveAcessoSecreta;
         private String bucket;
-        private String regiao;
+        private Regions regiao;
         private String diretorioFotos;
 
         public String getIdChaveAcesso() {
@@ -71,11 +72,11 @@ public class StorageProperties {
             this.bucket = bucket;
         }
 
-        public String getRegiao() {
+        public Regions getRegiao() {
             return regiao;
         }
 
-        public void setRegiao(String regiao) {
+        public void setRegiao(Regions regiao) {
             this.regiao = regiao;
         }
 

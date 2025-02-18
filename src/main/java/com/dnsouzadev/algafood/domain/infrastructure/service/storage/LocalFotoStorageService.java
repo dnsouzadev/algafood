@@ -1,10 +1,9 @@
-package com.dnsouzadev.algafood.domain.infrastructure.service;
+package com.dnsouzadev.algafood.domain.infrastructure.service.storage;
 
 import com.dnsouzadev.algafood.core.storage.StorageProperties;
 import com.dnsouzadev.algafood.domain.exception.StorageException;
 import com.dnsouzadev.algafood.domain.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
