@@ -5,5 +5,5 @@ import com.dnsouzadev.algafood.domain.model.FotoProduto;
 public interface ProdutoRepositoryQueries {
 
     FotoProduto save(FotoProduto foto);
-    void delete(FotoProduto foto);
+    void deleteFoto(FotoProduto foto);
 }

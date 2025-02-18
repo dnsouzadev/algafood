@@ -1,5 +1,5 @@
 create table teste (
-	id bigint not null auto_increment,
+                       id bigint not null auto_increment,
 
-	primary key (id)
-) engine=InnoDB charset=UTF8;
+                       primary key (id)
+) engine=InnoDB charset=utf8;

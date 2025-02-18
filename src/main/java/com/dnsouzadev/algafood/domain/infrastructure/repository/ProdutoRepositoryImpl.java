@@ -21,7 +21,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
 
     @Transactional
     @Override
-    public void delete(FotoProduto foto) {
+    public void deleteFoto(FotoProduto foto) {
         manager.remove(foto);
     }
 
