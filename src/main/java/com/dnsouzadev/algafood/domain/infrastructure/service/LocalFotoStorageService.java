@@ -16,6 +16,7 @@ public class LocalFotoStorageService implements FotoStorageService {
     private Path diretorioFotos;
 
     private static final String MSG_ERRO_COPIAR_ARQUIVO = "Não foi possível armazenar o arquivo";
+    private static final String MSG_ERRO_REMOVER_ARQUIVO = "Não foi possível excluir o arquivo";
 
     @Override
     public void armazenar(NovaFoto novaFoto) {
@@ -25,6 +26,17 @@ public class LocalFotoStorageService implements FotoStorageService {
             FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
         } catch (Exception e) {
             throw new StorageException(MSG_ERRO_COPIAR_ARQUIVO, e);
+        }
+    }
+
+    @Override
+    public void remover(String nomeArquivo) {
+        try {
+            Path arquivoPath = getArquivoPath(nomeArquivo);
+
+            Files.deleteIfExists(arquivoPath);
+        } catch (Exception e) {
+            throw new StorageException(MSG_ERRO_REMOVER_ARQUIVO, e);
         }
     }
 
