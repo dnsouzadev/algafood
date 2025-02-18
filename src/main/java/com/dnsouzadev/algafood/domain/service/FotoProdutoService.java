@@ -40,6 +40,7 @@ public class FotoProdutoService {
 
         FotoStorageService.NovaFoto novaFoto = new FotoStorageService.NovaFoto.Builder()
                 .comNomeArquivo(foto.getNomeArquivo())
+                .comContentType(foto.getContentType())
                 .comInputStream(dadosArquivo)
                 .build();
 

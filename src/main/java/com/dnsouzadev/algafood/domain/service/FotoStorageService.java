@@ -1,5 +1,7 @@
 package com.dnsouzadev.algafood.domain.service;
 
+import org.springframework.stereotype.Service;
+
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -25,7 +27,9 @@ public interface FotoStorageService {
 
     class NovaFoto {
         private String nomeArquivo;
+        private String contentType;
         private InputStream inputStream;
+
 
         public String getNomeArquivo() {
             return nomeArquivo;
@@ -33,6 +37,10 @@ public interface FotoStorageService {
 
         public InputStream getInputStream() {
             return inputStream;
+        }
+
+        public String getContentType() {
+            return contentType;
         }
 
         static class Builder {
@@ -45,6 +53,11 @@ public interface FotoStorageService {
 
             public Builder comInputStream(InputStream inputStream) {
                 novaFoto.inputStream = inputStream;
+                return this;
+            }
+
+            public Builder comContentType(String contentType) {
+                novaFoto.contentType = contentType;
                 return this;
             }
 
