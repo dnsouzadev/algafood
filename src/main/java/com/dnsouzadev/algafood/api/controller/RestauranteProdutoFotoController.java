@@ -82,6 +82,11 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoModelAssembler.toModel(fotoSalva);
     }
 
+    @DeleteMapping
+    public void remover(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        fotoProdutoService.excluir(restauranteId, produtoId);
+    }
+
     private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, List<MediaType> mediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
 
         boolean compativel = mediaTypesAceitas.stream()

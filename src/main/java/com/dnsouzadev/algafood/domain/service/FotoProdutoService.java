@@ -48,6 +48,16 @@ public class FotoProdutoService {
         return foto;
     }
 
+    @Transactional
+    public void excluir(Long restauranteId, Long produtoId) {
+        FotoProduto foto = buscarOuFalhar(restauranteId, produtoId);
+
+        produtoRepository.deleteFoto(foto);
+        produtoRepository.flush();
+
+        fotoStorageService.remover(foto.getNomeArquivo());
+    }
+
     public InputStream recuperar(String nomeArquivo) {
         return fotoStorageService.recuperar(nomeArquivo);
     }
