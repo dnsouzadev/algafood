@@ -1,13 +1,11 @@
 package com.dnsouzadev.algafood.domain.service;
 
-import org.springframework.stereotype.Service;
-
 import java.io.InputStream;
 import java.util.UUID;
 
 public interface FotoStorageService {
 
-    InputStream recuperar(String nomeArquivo);
+    FotoRecuperada recuperar(String nomeArquivo);
 
     void armazenar(NovaFoto novaFoto);
 
@@ -65,8 +63,44 @@ public interface FotoStorageService {
                 return novaFoto;
             }
         }
-
-
     }
 
+    class FotoRecuperada {
+        private InputStream inputStream;
+        private String url;
+
+        public InputStream getInputStream() {
+            return inputStream;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public boolean temUrl() {
+            return url != null;
+        }
+
+        public boolean temInputStream() {
+            return inputStream != null;
+        }
+
+        public static class Builder {
+            private FotoRecuperada fotoRecuperada = new FotoRecuperada();
+
+            public Builder comInputStream(InputStream inputStream) {
+                fotoRecuperada.inputStream = inputStream;
+                return this;
+            }
+
+            public Builder comUrl(String url) {
+                fotoRecuperada.url = url;
+                return this;
+            }
+
+            public FotoRecuperada build() {
+                return fotoRecuperada;
+            }
+        }
+    }
 }

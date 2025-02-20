@@ -59,7 +59,7 @@ public class FotoProdutoService {
         fotoStorageService.remover(foto.getNomeArquivo());
     }
 
-    public InputStream recuperar(String nomeArquivo) {
+    public FotoStorageService.FotoRecuperada recuperar(String nomeArquivo) {
         return fotoStorageService.recuperar(nomeArquivo);
     }
 
