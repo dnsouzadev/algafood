@@ -12,11 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.net.URL;
 
-@Service
-@Primary
 public class S3FotoStorageService implements FotoStorageService {
 
     @Autowired
