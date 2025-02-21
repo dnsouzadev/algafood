@@ -56,7 +56,7 @@ public interface EnvioEmailService {
             this.variaveis = variaveis;
         }
 
-        static class Builder {
+        public static class Builder {
             private Mensagem mensagem = new Mensagem();
 
             public Builder para(Set<String> destinatarios) {

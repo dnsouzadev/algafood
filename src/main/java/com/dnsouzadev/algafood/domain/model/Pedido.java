@@ -8,15 +8,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.dnsouzadev.algafood.domain.event.PedidoConfirmadoEvent;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Entity
-public class Pedido {
+public class Pedido extends AbstractAggregateRoot<Pedido> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -209,6 +211,8 @@ public class Pedido {
     public void confirmar() {
         setStatus(StatusPedido.CONFIRMADO);
         setDataConfirmacao(OffsetDateTime.now());
+
+        registerEvent(new PedidoConfirmadoEvent(this));
     }
 
     public void entregar() {
