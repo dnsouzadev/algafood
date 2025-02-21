@@ -6,16 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 @Service
 public class FluxoPedidoService {
 
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private EnvioEmailService envioEmailService;
+
     @Transactional
     public void confirmar(String codigoPedido) {
         Pedido pedido = pedidoService.buscarOuFalhar(codigoPedido);
         pedido.confirmar();
+
+        EnvioEmailService.Mensagem mensagem = new EnvioEmailService.Mensagem.Builder()
+                .assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado")
+                .corpo("O pedido de código <strong>" + pedido.getCodigo() + "</strong> foi confirmado!")
+                .para(Collections.singleton(pedido.getCliente().getEmail()))
+                .build();
+
+        envioEmailService.enviar(mensagem);
     }
 
     @Transactional
