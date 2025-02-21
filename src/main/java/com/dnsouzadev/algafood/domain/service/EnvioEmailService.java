@@ -3,6 +3,8 @@ package com.dnsouzadev.algafood.domain.service;
 import lombok.NonNull;
 import lombok.Singular;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public interface EnvioEmailService {
@@ -19,6 +21,8 @@ public interface EnvioEmailService {
 
         @NonNull
         private String corpo;
+
+        private Map<String, Object> variaveis = new HashMap<>();
 
         public Set<String> getDestinatarios() {
             return destinatarios;
@@ -44,6 +48,14 @@ public interface EnvioEmailService {
             this.corpo = corpo;
         }
 
+        public Map<String, Object> getVariaveis() {
+            return variaveis;
+        }
+
+        public void setVariaveis(Map<String, Object> variaveis) {
+            this.variaveis = variaveis;
+        }
+
         static class Builder {
             private Mensagem mensagem = new Mensagem();
 
@@ -59,6 +71,11 @@ public interface EnvioEmailService {
 
             public Builder corpo(String corpo) {
                 mensagem.setCorpo(corpo);
+                return this;
+            }
+
+            public Builder variaveis(String chave, Object valor) {
+                mensagem.getVariaveis().put(chave, valor);
                 return this;
             }
 
