@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.dnsouzadev.algafood.domain.event.PedidoCanceladoEvent;
 import com.dnsouzadev.algafood.domain.event.PedidoConfirmadoEvent;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import jakarta.persistence.*;
@@ -223,6 +224,8 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelar() {
         setStatus(StatusPedido.CANCELADO);
         setDataCancelamento(OffsetDateTime.now());
+
+        registerEvent(new PedidoCanceladoEvent(this));
     }
 
     @PrePersist

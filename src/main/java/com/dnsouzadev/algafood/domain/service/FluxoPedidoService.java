@@ -35,7 +35,9 @@ public class FluxoPedidoService {
     @Transactional
     public void cancelar(String codigoPedido) {
         Pedido pedido = pedidoService.buscarOuFalhar(codigoPedido);
-        pedido.setStatus(StatusPedido.CANCELADO);
+        pedido.cancelar();
+
+        pedidoRepository.save(pedido);
     }
 
 }
