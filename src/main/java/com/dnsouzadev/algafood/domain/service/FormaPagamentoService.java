@@ -36,6 +36,10 @@ public class FormaPagamentoService {
         return formaPagamentoRepository.getDataAtualizacao();
     }
 
+    public OffsetDateTime getDataAtualizacaoById(Long formaPagamentoId) {
+        return formaPagamentoRepository.getDataAtualizacaoById(formaPagamentoId);
+    }
+
     public FormaPagamento buscarOuFalhar(Long formaPagamentoId) {
         return formaPagamentoRepository.findById(formaPagamentoId)
                 .orElseThrow(() -> new FormaPagamentoNaoEncontradaException(formaPagamentoId));
