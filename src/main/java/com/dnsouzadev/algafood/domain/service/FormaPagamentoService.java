@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -29,6 +30,10 @@ public class FormaPagamentoService {
     public void excluir(Long formaPagamentoId) {
         formaPagamentoRepository.delete(buscarOuFalhar(formaPagamentoId));
         formaPagamentoRepository.flush();
+    }
+
+    public OffsetDateTime getDataAtualizacao() {
+        return formaPagamentoRepository.getDataAtualizacao();
     }
 
     public FormaPagamento buscarOuFalhar(Long formaPagamentoId) {
