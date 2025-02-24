@@ -8,10 +8,13 @@ import com.dnsouzadev.algafood.domain.model.FormaPagamento;
 import com.dnsouzadev.algafood.domain.service.FormaPagamentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
@@ -27,13 +30,17 @@ public class FormaPagamentoController {
     private FormaPagamentoInputDisassemble formaPagamentoInputDisassemble;
 
     @GetMapping
-    public List<FormaPagamentoModel> listar() {
-        return formaPagamentoModelAssembler.toCollectionModel(formaPagamentoService.listar());
+    public ResponseEntity<List<FormaPagamentoModel>> listar() {
+        return ResponseEntity.ok()
+                        .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                        .body(formaPagamentoModelAssembler.toCollectionModel(formaPagamentoService.listar()));
     }
 
     @GetMapping("/{formaPagamentoId}")
-    public FormaPagamentoModel buscar(@PathVariable Long formaPagamentoId) {
-        return formaPagamentoModelAssembler.toModel(formaPagamentoService.buscarOuFalhar(formaPagamentoId));
+    public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId) {
+        return ResponseEntity.ok()
+                        .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                        .body(formaPagamentoModelAssembler.toModel(formaPagamentoService.buscarOuFalhar(formaPagamentoId)));
     }
 
     @PostMapping
