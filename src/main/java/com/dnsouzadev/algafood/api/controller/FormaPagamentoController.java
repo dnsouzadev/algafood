@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.api.ResourceUriHelper;
 import com.dnsouzadev.algafood.api.assembler.FormaPagamentoInputDisassemble;
 import com.dnsouzadev.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.dnsouzadev.algafood.api.model.FormaPagamentoModel;
@@ -76,6 +77,7 @@ public class FormaPagamentoController {
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoModel adicionar(@Valid @RequestBody FormaPagamentoInput formaPagamentoInput) {
         FormaPagamento formaPagamento = formaPagamentoInputDisassemble.toDomainObject(formaPagamentoInput);
+        ResourceUriHelper.addUriInResponseHeader(formaPagamento.getId());
         return formaPagamentoModelAssembler.toModel(formaPagamentoService.salvar(formaPagamento));
     }
 

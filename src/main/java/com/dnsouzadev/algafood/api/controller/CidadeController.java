@@ -17,6 +17,8 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +51,18 @@ public class CidadeController {
 
     @GetMapping("/{cidadeId}")
     public CidadeModel buscar(@PathVariable Long cidadeId) {
-        return cidadeModelAssembler.toModel(cidadeService.buscarOuFalhar(cidadeId));
+        Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
+
+        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
+
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+                .slash(cidadeModel.getId()).withSelfRel());
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+                .withRel("cidades"));
+        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
+                .slash(cidadeModel.getEstado().getId()).withSelfRel());
+
+        return cidadeModel;
     }
 
     @PostMapping

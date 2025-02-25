@@ -1,6 +1,8 @@
 package com.dnsouzadev.algafood.api.model;
 
-public class CidadeModel {
+import org.springframework.hateoas.RepresentationModel;
+
+public class CidadeModel extends RepresentationModel<CidadeModel> {
     private Long id;
     private String nome;
     private EstadoModel estado;
