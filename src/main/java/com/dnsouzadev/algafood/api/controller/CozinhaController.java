@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.api.ResourceUriHelper;
 import com.dnsouzadev.algafood.api.assembler.CozinhaModelAssembler;
 import com.dnsouzadev.algafood.api.assembler.CozinhaInputDisassemble;
 import com.dnsouzadev.algafood.api.model.CozinhaModel;
@@ -51,6 +52,7 @@ public class CozinhaController {
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
         Cozinha cozinha = cozinhaInputDisassemble.toDomainObject(cozinhaInput);
+        ResourceUriHelper.addUriInResponseHeader(cozinha.getId());
         return cozinhaModelAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
