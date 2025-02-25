@@ -55,12 +55,12 @@ public class CidadeController {
 
         CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
 
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-                .slash(cidadeModel.getId()).withSelfRel());
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-                .withRel("cidades"));
-        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
-                .slash(cidadeModel.getEstado().getId()).withSelfRel());
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                .buscar(cidadeModel.getId())).withSelfRel());
+        cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                .listar()).withRel("cidades"));
+        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
+                .buscar(cidadeModel.getEstado().getId())).withSelfRel());
 
         return cidadeModel;
     }
