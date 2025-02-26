@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +37,15 @@ public class CozinhaController {
     @Autowired
     private CozinhaInputDisassemble cozinhaInputDisassemble;
 
-    @GetMapping
-    public Page<CozinhaModel> listar(Pageable pageable) {
-        List<Cozinha> cozinhas = cozinhaRepository.findAll(pageable).getContent();
-        List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhas);
+    @Autowired
+    private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-        return new PageImpl<>(cozinhasModel, pageable, cozinhas.size());
+    @GetMapping
+    public PagedModel<CozinhaModel> listar(Pageable pageable) {
+        Page<Cozinha> cozinhas = cozinhaRepository.findAll(pageable);
+
+        return pagedResourcesAssembler
+                .toModel(cozinhas, cozinhaModelAssembler);
     }
 
     @GetMapping("/{cozinhaId}")

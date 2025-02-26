@@ -2,8 +2,11 @@ package com.dnsouzadev.algafood.api.model;
 
 import com.dnsouzadev.algafood.api.model.view.RestauranteView;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-public class CozinhaModel {
+@Relation(collectionRelation = "cozinhas")
+public class CozinhaModel extends RepresentationModel<CozinhaModel> {
 
     @JsonView(RestauranteView.Resumo.class)
     private Long id;
