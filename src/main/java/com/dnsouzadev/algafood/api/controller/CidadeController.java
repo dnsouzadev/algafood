@@ -17,6 +17,7 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpHeaders;
@@ -45,8 +46,23 @@ public class CidadeController {
     private CidadeInputDisassemble cidadeInputDisassemble;
 
     @GetMapping
-    public List<CidadeModel> listar() {
-        return cidadeModelAssembler.toCollectionModel(cidadeService.listar());
+    public CollectionModel<CidadeModel> listar() {
+        List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(cidadeService.listar());
+
+        CollectionModel<CidadeModel> cidadesModelCollection = CollectionModel.of(cidadesModel);
+
+        cidadesModelCollection.forEach(cidadeModel -> {
+            cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                    .buscar(cidadeModel.getId())).withSelfRel());
+            cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
+                    .listar()).withRel("cidades"));
+            cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
+                    .buscar(cidadeModel.getEstado().getId())).withSelfRel());
+        });
+
+        cidadesModelCollection.add(WebMvcLinkBuilder.linkTo(CidadeController.class).withSelfRel());
+
+        return cidadesModelCollection;
     }
 
     @GetMapping("/{cidadeId}")
