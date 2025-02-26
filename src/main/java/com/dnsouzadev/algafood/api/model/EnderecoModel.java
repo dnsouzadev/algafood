@@ -1,5 +1,8 @@
 package com.dnsouzadev.algafood.api.model;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 public class EnderecoModel {
 
         private String cep;

@@ -2,6 +2,8 @@ package com.dnsouzadev.algafood.api.model;
 
 import com.dnsouzadev.algafood.domain.model.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -9,7 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 //@JsonFilter("pedidoFilter")
-public class PedidoResumoModel {
+@Relation(collectionRelation = "pedidos")
+public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
 
     private String codigo;
     private BigDecimal subtotal;

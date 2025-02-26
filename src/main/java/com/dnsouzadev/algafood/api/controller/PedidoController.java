@@ -10,6 +10,7 @@ import com.dnsouzadev.algafood.core.data.PageableTranslator;
 import com.dnsouzadev.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.dnsouzadev.algafood.domain.exception.NegocioException;
 import com.dnsouzadev.algafood.domain.infrastructure.spec.PedidoSpecs;
+import com.dnsouzadev.algafood.domain.model.Cozinha;
 import com.dnsouzadev.algafood.domain.model.Pedido;
 import com.dnsouzadev.algafood.domain.model.Usuario;
 import com.dnsouzadev.algafood.domain.repository.PedidoRepository;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,12 +49,17 @@ public class PedidoController {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+
     @GetMapping
-    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
+    public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable) {
         pageable = traduzirPageable(pageable);
+
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
-        List<PedidoResumoModel> pedidosResumoList = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
-        return new PageImpl<>(pedidosResumoList, pageable, pedidosPage.getTotalElements());
+
+        return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
+
     }
 
     @GetMapping("/{codigoPedido}")

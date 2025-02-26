@@ -1,8 +1,12 @@
 package com.dnsouzadev.algafood.api.model;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import java.math.BigDecimal;
 
-public class ItemPedidoModel {
+@Relation(collectionRelation = "itens")
+public class ItemPedidoModel extends RepresentationModel<ItemPedidoModel> {
 
     private Long produtoId;
     private String produtoNome;
