@@ -47,38 +47,14 @@ public class CidadeController {
 
     @GetMapping
     public CollectionModel<CidadeModel> listar() {
-        List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(cidadeService.listar());
-
-        CollectionModel<CidadeModel> cidadesModelCollection = CollectionModel.of(cidadesModel);
-
-        cidadesModelCollection.forEach(cidadeModel -> {
-            cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                    .buscar(cidadeModel.getId())).withSelfRel());
-            cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                    .listar()).withRel("cidades"));
-            cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                    .buscar(cidadeModel.getEstado().getId())).withSelfRel());
-        });
-
-        cidadesModelCollection.add(WebMvcLinkBuilder.linkTo(CidadeController.class).withSelfRel());
-
-        return cidadesModelCollection;
+        return cidadeModelAssembler.toCollectionModel(cidadeService.listar());
     }
 
     @GetMapping("/{cidadeId}")
     public CidadeModel buscar(@PathVariable Long cidadeId) {
         Cidade cidade = cidadeService.buscarOuFalhar(cidadeId);
 
-        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
-
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                .buscar(cidadeModel.getId())).withSelfRel());
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                .listar()).withRel("cidades"));
-        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                .buscar(cidadeModel.getEstado().getId())).withSelfRel());
-
-        return cidadeModel;
+        return cidadeModelAssembler.toModel(cidade);
     }
 
     @PostMapping
