@@ -7,6 +7,7 @@ import com.dnsouzadev.algafood.domain.service.RestauranteService;
 import com.dnsouzadev.algafood.domain.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,10 @@ public class UsuarioResponsavelController {
     @GetMapping
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
         Set<Usuario> usuario = restauranteService.listarUsuariosResponsaveis(restauranteId);
-        return usuarioModelAssembler.toCollectionModel(usuario);
+        return usuarioModelAssembler.toCollectionModel(usuario)
+                .removeLinks()
+                .add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioResponsavelController.class)
+                        .listar(restauranteId)).withSelfRel());
     }
 
     @PutMapping("/{responsavelId}")
