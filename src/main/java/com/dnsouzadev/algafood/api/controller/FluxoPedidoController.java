@@ -14,21 +14,21 @@ public class FluxoPedidoController {
 
     @PutMapping("/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Class<?> confirmar(@PathVariable String codigoPedido) {
+    public Object confirmar(@PathVariable String codigoPedido) {
         fluxoPedidoService.confirmar(codigoPedido);
         return null;
     }
 
     @PutMapping("/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Class<?> entregar(@PathVariable String codigoPedido) {
+    public Object entregar(@PathVariable String codigoPedido) {
         fluxoPedidoService.entregar(codigoPedido);
         return null;
     }
 
     @PutMapping("/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Class<?> cancelar(@PathVariable String codigoPedido) {
+    public Object cancelar(@PathVariable String codigoPedido) {
         fluxoPedidoService.cancelar(codigoPedido);
         return null;
     }
