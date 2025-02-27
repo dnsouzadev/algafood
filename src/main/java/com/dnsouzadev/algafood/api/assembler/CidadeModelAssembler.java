@@ -1,7 +1,7 @@
 package com.dnsouzadev.algafood.api.assembler;
 
+import com.dnsouzadev.algafood.api.ApiLinks;
 import com.dnsouzadev.algafood.api.controller.CidadeController;
-import com.dnsouzadev.algafood.api.controller.EstadoController;
 import com.dnsouzadev.algafood.api.model.CidadeModel;
 import com.dnsouzadev.algafood.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
@@ -17,6 +17,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks apiLinks;
+
     public CidadeModelAssembler() {
         super(CidadeController.class, CidadeModel.class);
     }
@@ -27,10 +30,8 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
         modelMapper.map(cidade, cidadeModel);
 
-        cidadeModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CidadeController.class)
-                .listar()).withRel("cidades"));
-        cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class)
-                .buscar(cidadeModel.getEstado().getId())).withSelfRel());
+        cidadeModel.add(apiLinks.linkToCidade(cidadeModel.getId(), "cidade"));
+        cidadeModel.getEstado().add(apiLinks.linkToEstado(cidadeModel.getEstado().getId(), "estado"));
 
         return cidadeModel;
     }

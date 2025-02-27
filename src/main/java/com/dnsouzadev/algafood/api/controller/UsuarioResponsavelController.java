@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.api.controller;
 
+import com.dnsouzadev.algafood.api.ApiLinks;
 import com.dnsouzadev.algafood.api.assembler.UsuarioModelAssembler;
 import com.dnsouzadev.algafood.api.model.UsuarioModel;
 import com.dnsouzadev.algafood.domain.model.Usuario;
@@ -27,13 +28,15 @@ public class UsuarioResponsavelController {
     @Autowired
     private UsuarioModelAssembler usuarioModelAssembler;
 
+    @Autowired
+    private ApiLinks apiLinks;
+
     @GetMapping
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
         Set<Usuario> usuario = restauranteService.listarUsuariosResponsaveis(restauranteId);
         return usuarioModelAssembler.toCollectionModel(usuario)
                 .removeLinks()
-                .add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioResponsavelController.class)
-                        .listar(restauranteId)).withSelfRel());
+                .add(apiLinks.linkToResponsaveisRestaurante(restauranteId));
     }
 
     @PutMapping("/{responsavelId}")

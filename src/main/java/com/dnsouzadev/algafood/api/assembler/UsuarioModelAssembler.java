@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.api.assembler;
 
+import com.dnsouzadev.algafood.api.ApiLinks;
 import com.dnsouzadev.algafood.api.controller.UsuarioController;
 import com.dnsouzadev.algafood.api.controller.UsuarioGruposController;
 import com.dnsouzadev.algafood.api.model.UsuarioModel;
@@ -20,6 +21,9 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks apiLinks;
+
     public UsuarioModelAssembler() {
         super(UsuarioController.class, UsuarioModel.class);
     }
@@ -30,10 +34,8 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
 
         modelMapper.map(usuario, usuarioModel);
 
-        usuarioModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class)
-                .listar()).withRel("usuarios"));
-        usuarioModel.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioGruposController.class)
-                .listar(usuario.getId())).withRel("grupos-usuarios"));
+        usuarioModel.add(apiLinks.linkToUsuarios("usuarios"));
+        usuarioModel.add(apiLinks.linkToGruposUsuario(usuarioModel.getId(), "grupos-usuario"));
 
         return usuarioModel;
     }

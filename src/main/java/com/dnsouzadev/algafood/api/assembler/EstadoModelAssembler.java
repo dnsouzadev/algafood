@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.api.assembler;
 
+import com.dnsouzadev.algafood.api.ApiLinks;
 import com.dnsouzadev.algafood.api.controller.EstadoController;
 import com.dnsouzadev.algafood.api.model.EstadoModel;
 import com.dnsouzadev.algafood.domain.model.Estado;
@@ -17,6 +18,9 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks apiLinks;
+
     public EstadoModelAssembler() {
         super(EstadoController.class, EstadoModel.class);
     }
@@ -27,7 +31,7 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
 
         modelMapper.map(estado, estadoModel);
 
-        estadoModel.add(linkTo(EstadoController.class).withRel("estados"));
+        estadoModel.add(apiLinks.linkToEstados("estados"));
 
         return estadoModel;
     }
