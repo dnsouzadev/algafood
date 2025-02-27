@@ -1,5 +1,6 @@
 package com.dnsouzadev.algafood.api.assembler;
 
+import com.dnsouzadev.algafood.api.ApiLinks;
 import com.dnsouzadev.algafood.api.controller.*;
 import com.dnsouzadev.algafood.api.model.PedidoModel;
 import com.dnsouzadev.algafood.domain.model.Pedido;
@@ -20,6 +21,9 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ApiLinks apiLinks;
+
     public PedidoModelAssembler() {
         super(PedidoController.class, PedidoModel.class);
     }
@@ -29,12 +33,7 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        TemplateVariables pageVariables = new TemplateVariables(
-                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        pedidoModel.add(Link.of(UriTemplate.of(linkTo(PedidoController.class).toUri().toString(), pageVariables), "pedidos"));
+        pedidoModel.add(apiLinks.linkToPedidos());
 
         pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .buscar(pedido.getRestaurante().getId())).withSelfRel());
